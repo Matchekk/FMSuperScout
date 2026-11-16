@@ -8,7 +8,7 @@ const path = require('path');
 
 // Universele no-op element-stub: elke property/methode geeft weer een stub terug, en is
 // aanroepbaar. Genoeg om alle top-level DOM-bediening van app.js geruisloos te laten slagen.
-function stub() {
+function stub(onSet) {
   const fn = function () { return stub(); };
   return new Proxy(fn, {
     get(_, prop) {
@@ -21,16 +21,16 @@ function stub() {
       if (prop === Symbol.toPrimitive) return () => '';
       return stub();
     },
-    set() { return true; },
+    set(_, prop, value) { if (onSet) onSet(prop, value); return true; },
     apply() { return stub(); },
   });
 }
 
-function loadApp() {
+function loadApp(options = {}) {
   // nations.js gaat vóór app.js, net als de <script>-volgorde in index.html.
   const src = fs.readFileSync(path.join(__dirname, '..', 'app', 'nations.js'), 'utf8') + '\n'
-    + fs.readFileSync(path.join(__dirname, '..', 'app', 'app.js'), 'utf8');
-  const el = () => stub();
+    + fs.readFileSync(options.sourcePath || path.join(__dirname, '..', 'app', 'app.js'), 'utf8');
+  const el = id => options.elements?.[id] || stub((prop, value) => options.onElementSet?.(id, prop, value));
   const documentStub = {
     getElementById: el, createElement: el, querySelector: el,
     querySelectorAll: () => [],
@@ -56,6 +56,9 @@ function loadApp() {
     'I18N', 'ATTR_LABEL', 'ROLE_LABEL', 'CARDL', 'metaScore', 'metaPaScore',
     'NATIONS', 'JOB_LABEL', 'natsLabel', 'jobLabel', 'fmtWage', 'wageFactor',
     'histKey', 'STAFF_ATTR_LABEL', 'STAFF_ATTR_GROUPS', 'natPos', 'myTeamType', 'inMyTeam', 'dealInvolvesMe',
+    'gkMeta27Details', 'compareGkMeta', 'MAC_GK_BETA', 'PURITY_GK_BETA', 'GK_META27_W',
+    'META_W', 'META_GK_W', 'weightedMeta', 'metaHtml', 'metaPaHtml', 'PLAYER_COLS',
+    'applyFilters', 'sortRows', 'showDetail', 'openCompare', 'buildCardModel', 'loadDump', 'parseDumpStream',
   ];
   const body = src + '\n;return {' + exposed.map(n => `${n}: typeof ${n} !== 'undefined' ? ${n} : undefined`).join(',') + '};';
   const factory = new Function(
@@ -64,8 +67,8 @@ function loadApp() {
     body,
   );
   return factory(
-    documentStub, windowStub, localStorageStub, navigatorStub, fetchStub,
-    noopTimer, noopTimer, () => {}, () => {}, console,
+    documentStub, windowStub, localStorageStub, navigatorStub, options.fetch || fetchStub,
+    options.setTimeout || noopTimer, noopTimer, () => {}, () => {}, console,
   );
 }
 

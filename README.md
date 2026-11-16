@@ -47,14 +47,18 @@ save over time, and that unlocks two things no tool without memory can do:
   that only reads the present, a brand new 16-year-old with PA 178 looks like every other
   16-year-old.
 
-**A meta score built on real testing.** Every player gets a 1-20 score weighted by
-[FM-Arena's attribute testing](https://fm-arena.com/table/26-player-attributes-testing): what
-actually wins matches in the engine. Two players with equal CA? The higher meta score usually
-performs better. Goalkeepers get their own weighting, based on
-[harvestgreen22's keeper attribute retest](https://fm-arena.com/thread/18816-fm24-i-re-tested-the-goalkeeper-s-attributes-using-newer-test-league/).
-Next to it sits **PA meta**: the same weighting applied to the attributes a player is expected
-to have at his potential, following the measured growth profile of his position group. Sort on
-it to find tomorrow's meta stars.
+**A meta index informed by match-engine experiments.** Scores use the 1-20 attribute scale.
+Outfield players keep the existing
+[FM-Arena attribute weighting](https://fm-arena.com/table/26-player-attributes-testing).
+Explicitly identified FM27 goalkeepers use **[GK Meta v2.0](docs/fm27-goalkeeper-meta-v2.md)**:
+an equal average of separately normalized Fm-Match-Lab 13b and Purity models, led by
+Agility, Reflexes and Aerial Reach. All six core attributes must be present and valid;
+otherwise the score is unavailable. FM26 and unidentified game versions retain the
+[legacy FM24 goalkeeper weighting](https://fm-arena.com/thread/18816-fm24-i-re-tested-the-goalkeeper-s-attributes-using-newer-test-league/).
+The index is not calibrated against independent goalkeeper match outcomes.
+**PA meta** applies the same weighting to the existing position-group attribute projection:
+a hypothetical development index, not a validated probability of reaching those attributes.
+See the [reproducible synthetic comparison](docs/fm27-goalkeeper-meta-v2-scenarios.md).
 
 **Shareable player cards.** One click saves a PNG in FM's own visual language: scout stars for
 current and potential ability, the full attribute grid in FM colours, best roles and finances.

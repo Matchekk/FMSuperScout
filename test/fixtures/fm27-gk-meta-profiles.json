@@ -1,0 +1,12 @@
+{
+  "description": "Synthetic software/scenario profiles only; not match-performance validation.",
+  "profiles": [
+    { "name": "Reflex specialist", "pressure": 12, "attrs": { "Agility": 12, "Reflexes": 19, "AerialReach": 12, "Concentration": 12, "Acceleration": 12, "Handling": 12, "Pace": 12 } },
+    { "name": "Agility specialist", "pressure": 12, "attrs": { "Agility": 19, "Reflexes": 12, "AerialReach": 12, "Concentration": 12, "Acceleration": 12, "Handling": 12, "Pace": 12 } },
+    { "name": "Aerial specialist", "pressure": 12, "attrs": { "Agility": 13, "Reflexes": 13, "AerialReach": 20, "Concentration": 15, "Acceleration": 10, "Handling": 16, "Pace": 10 } },
+    { "name": "Technical sweeper keeper", "pressure": 18, "attrs": { "Agility": 12, "Reflexes": 12, "AerialReach": 12, "Concentration": 12, "Acceleration": 17, "Handling": 12, "Pace": 18, "Passing": 19, "Kicking": 19, "FirstTouch": 18, "RushingOut": 18, "OneOnOnes": 15 } },
+    { "name": "Balanced", "pressure": 14, "attrs": { "Agility": 14, "Reflexes": 14, "AerialReach": 14, "Concentration": 14, "Acceleration": 14, "Handling": 14, "Pace": 14 } },
+    { "name": "Weak", "pressure": 8, "attrs": { "Agility": 8, "Reflexes": 8, "AerialReach": 8, "Concentration": 8, "Acceleration": 8, "Handling": 8, "Pace": 8 } },
+    { "name": "Elite", "pressure": 18, "attrs": { "Agility": 18, "Reflexes": 18, "AerialReach": 18, "Concentration": 18, "Acceleration": 18, "Handling": 18, "Pace": 18 } }
+  ]
+}

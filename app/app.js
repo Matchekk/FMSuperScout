@@ -182,8 +182,10 @@ const I18N = {
     wagePer: 'Salaris per', perWeek: 'week', perMonth: 'maand', perYear: 'jaar',
     perWeekSuf: 'p/w', perMonthSuf: 'p/mnd', perYearSuf: 'p/jr', jobStaff: 'Staflid',
     c_meta: 'Meta', metaLabel: 'Meta-score', c_metapa: 'PA-meta',
-    metaHint: 'Gewogen gemiddelde (1-20) van de attributen die volgens FM-Arena\'s match-engine-tests wedstrijden winnen; Snelheid en Versnelling tellen veruit het zwaarst. Keepers: eigen weging uit de keeperstest (Reflexen, Behendigheid).\n\n15+ elite, 13-15 sterk, 11-13 degelijk. Bij gelijke CA presteert de hoogste Meta meestal beter.',
-    metaPaHint: 'Dezelfde meta-weging, toegepast op de attributen die hij op zijn potentieel (PA) naar verwachting haalt. Projectie volgt het groeiprofiel van zijn positiegroep; fysieke groei stopt na 23.\n\nUitontwikkeld = gelijk aan Meta. Sorteer hierop voor de meta-toppers van morgen.',
+    metaHint: "Gewogen attribuutindex (1–20). Veldspelers: bestaande FM-Arena-weging, vooral Snelheid en Versnelling. FM27-keepers: FM27 GK Meta v2.0, vooral Behendigheid, Reflexen en Luchtbereik. FM26 en onbekende spelversies: legacy-keepersmodel. Geen gekalibreerde voorspelling van wedstrijdprestaties.",
+    metaPaHint: "Dezelfde meta-weging op naar PA geprojecteerde attributen. Dit is een hypothetische ontwikkelingsindex, geen gevalideerde kans dat de speler deze waarden bereikt. De bestaande projectie per positiegroep blijft behouden. Zonder restpotentieel gelijk aan Meta.",
+    gkMeta27Hint: "FM27 GK Meta v2.0 (1–20)\nBelangrijkst: Behendigheid, Reflexen, Luchtbereik.\nFm-Match-Lab 13b en Purity (FM-Arena): elk bronnenmodel apart normaliseren, daarna 50/50 middelen. Ook Concentratie, Versnelling en Vangen tellen mee. Alle zes waarden zijn vereist.\nDe bronnenrange meet alleen modelverschillen, geen statistisch betrouwbaarheidsinterval. Niet gekalibreerd op onafhankelijke werkelijke keeperprestaties.",
+    gkMeta27PaHint: "FM27 GK Meta v2.0 — PA\nDezelfde zes gewichten op de bestaande PA-projectie. Hypothetische ontwikkelingsindex, geen gevalideerde kans op deze attributen of prestaties. Zonder restpotentieel gelijk aan Meta. De bronnenrange is geen statistisch betrouwbaarheidsinterval.",
     verWarn: 'FM-versie {v} gedetecteerd; de uitlezing is geijkt op {s}.x. Data mogelijk onbetrouwbaar tot een update van FMSuperScout.',
     verWarnOldDump: 'Deze data komt van een oudere FMSuperScout-plugin. Alles werkt, maar haal verse data op (F9 in FM met je save geladen) voor het beste resultaat.',
   },
@@ -323,8 +325,10 @@ const I18N = {
     wagePer: 'Wage per', perWeek: 'week', perMonth: 'month', perYear: 'year',
     perWeekSuf: '/wk', perMonthSuf: '/mo', perYearSuf: '/yr', jobStaff: 'Staff member',
     c_meta: 'Meta', metaLabel: 'Meta score', c_metapa: 'PA meta',
-    metaHint: 'Weighted average (1-20) of the attributes that win matches according to FM-Arena\'s match-engine tests; Pace and Acceleration count heaviest by far. Goalkeepers: own weighting from the keeper test (Reflexes, Agility).\n\n15+ elite, 13-15 strong, 11-13 decent. At equal CA the higher Meta usually performs better.',
-    metaPaHint: 'The same meta weighting, applied to the attributes he is expected to reach at his potential (PA). The projection follows his position group\'s growth profile; physical growth stops after 23.\n\nFully developed = same as Meta. Sort on this for tomorrow\'s meta stars.',
+    metaHint: "Weighted attribute index (1–20). Outfield players: existing FM-Arena weighting, led by Pace and Acceleration. FM27 goalkeepers: FM27 GK Meta v2.0, led by Agility, Reflexes and Aerial Reach. FM26 and unknown game versions: legacy goalkeeper model. Not a calibrated prediction of match performance.",
+    metaPaHint: "The same meta weighting on attributes projected towards PA. A hypothetical development index, not a validated probability of reaching those attributes. The existing position-group projection is retained. With no remaining potential, equals Meta.",
+    gkMeta27Hint: "FM27 GK Meta v2.0 (1–20)\nMain attributes: Agility, Reflexes, Aerial Reach.\nFm-Match-Lab 13b and Purity (FM-Arena): normalize each source model separately, then average 50/50. Concentration, Acceleration and Handling also contribute. All six values are required.\nThe source range measures model differences only, not a statistical confidence interval. Not calibrated against independent real goalkeeper match outcomes.",
+    gkMeta27PaHint: "FM27 GK Meta v2.0 — PA\nThe same six weights on the existing PA projection. A hypothetical development index, not a validated probability of reaching those attributes or outcomes. With no remaining potential, equals Meta. The source range is not a statistical confidence interval.",
     verWarn: 'FM version {v} detected; memory reading is calibrated for {s}.x. Data may be unreliable until FMSuperScout is updated.',
     verWarnOldDump: 'This data was made by an older FMSuperScout plugin. Everything works, but fetch fresh data (F9 in FM with your save loaded) for the best results.',
   },
@@ -464,8 +468,10 @@ const I18N = {
     wagePer: 'Salaire par', perWeek: 'semaine', perMonth: 'mois', perYear: 'an',
     perWeekSuf: '/sem', perMonthSuf: '/mois', perYearSuf: '/an', jobStaff: 'Membre du staff',
     c_meta: 'Méta', metaLabel: 'Score méta', c_metapa: 'Méta PA',
-    metaHint: 'Moyenne pondérée (1-20) des attributs qui gagnent des matchs selon les tests du moteur de FM-Arena ; Vitesse et Accélération pèsent de loin le plus lourd. Gardiens : pondération propre issue du test des gardiens (Réflexes, Agilité).\n\n15+ élite, 13-15 fort, 11-13 correct. À CA égale, le Méta le plus haut performe en général mieux.',
-    metaPaHint: 'La même pondération méta, appliquée aux attributs qu\'il devrait atteindre à son potentiel (PA). La projection suit le profil de progression de son groupe de postes ; le physique cesse de progresser après 23 ans.\n\nJoueur abouti = identique au Méta. Triez dessus pour trouver les stars méta de demain.',
+    metaHint: "Indice pondéré des attributs (1–20). Joueurs de champ : pondération FM-Arena existante, surtout Vitesse et Accélération. Gardiens FM27 : FM27 GK Meta v2.0, surtout Agilité, Réflexes et Prise de balle aérienne. FM26 et versions inconnues : ancien modèle des gardiens. Pas une prédiction calibrée des performances en match.",
+    metaPaHint: "La même pondération méta sur les attributs projetés vers le PA. Indice de développement hypothétique, pas une probabilité validée d'atteindre ces attributs. La projection existante par groupe de postes est conservée. Sans potentiel restant, égal au Méta.",
+    gkMeta27Hint: "FM27 GK Meta v2.0 (1–20)\nAttributs principaux : Agilité, Réflexes, Prise de balle aérienne.\nFm-Match-Lab 13b et Purity (FM-Arena) : normalisation séparée de chaque modèle, puis moyenne 50/50. Concentration, Accélération et Prise de balle comptent aussi. Les six valeurs sont requises.\nL'étendue entre sources mesure uniquement la différence des modèles, pas un intervalle de confiance statistique. Non calibré sur des résultats réels indépendants de gardiens en match.",
+    gkMeta27PaHint: "FM27 GK Meta v2.0 — PA\nLes six mêmes poids sur la projection PA existante. Indice de développement hypothétique, pas une probabilité validée d'atteindre ces attributs ou performances. Sans potentiel restant, égal au Méta. L'étendue entre sources n'est pas un intervalle de confiance statistique.",
     verWarn: 'Version FM {v} détectée ; la lecture est calibrée pour {s}.x. Données possiblement peu fiables avant une mise à jour de FMSuperScout.',
     verWarnOldDump: 'Ces données viennent d\'un plugin FMSuperScout plus ancien. Tout fonctionne, mais rechargez des données fraîches (F9 dans FM, sauvegarde chargée) pour un meilleur résultat.',
   },
@@ -605,8 +611,10 @@ const I18N = {
     wagePer: 'Gehalt pro', perWeek: 'Woche', perMonth: 'Monat', perYear: 'Jahr',
     perWeekSuf: '/Wo', perMonthSuf: '/Mon.', perYearSuf: '/Jahr', jobStaff: 'Mitarbeiter',
     c_meta: 'Meta', metaLabel: 'Meta-Score', c_metapa: 'PA-Meta',
-    metaHint: 'Gewichteter Durchschnitt (1-20) der Attribute, die laut FM-Arenas Match-Engine-Tests Spiele gewinnen; Schnelligkeit und Antritt zählen mit Abstand am meisten. Torhüter: eigene Gewichtung aus dem Torwart-Test (Reflexe, Beweglichkeit).\n\n15+ Elite, 13-15 stark, 11-13 solide. Bei gleicher CA spielt der höhere Meta meist besser.',
-    metaPaHint: 'Dieselbe Meta-Gewichtung, angewandt auf die Attribute, die er an seinem Potenzial (PA) voraussichtlich erreicht. Die Projektion folgt dem Wachstumsprofil seiner Positionsgruppe; Physis wächst nach 23 nicht mehr.\n\nAusentwickelt = gleich Meta. Sortiere danach für die Meta-Stars von morgen.',
+    metaHint: "Gewichteter Attributindex (1–20). Feldspieler: bestehende FM-Arena-Gewichtung, vor allem Schnelligkeit und Antritt. FM27-Torhüter: FM27 GK Meta v2.0, vor allem Beweglichkeit, Reflexe und Hohe Bälle. FM26 und unbekannte Spielversionen: Legacy-Torwartmodell. Keine kalibrierte Vorhersage der Matchleistung.",
+    metaPaHint: "Dieselbe Meta-Gewichtung auf nach PA projizierten Attributen. Ein hypothetischer Entwicklungsindex, keine validierte Wahrscheinlichkeit, diese Werte zu erreichen. Die bisherige Projektion je Positionsgruppe bleibt erhalten. Ohne Restpotenzial gleich Meta.",
+    gkMeta27Hint: "FM27 GK Meta v2.0 (1–20)\nWichtigste Attribute: Beweglichkeit, Reflexe, Hohe Bälle.\nFm-Match-Lab 13b und Purity (FM-Arena): jedes Quellenmodell getrennt normalisieren, danach 50/50 mitteln. Auch Konzentration, Antritt und Halten zählen mit. Alle sechs Werte sind erforderlich.\nDer Quellenbereich misst nur Modellunterschiede, kein statistisches Konfidenzintervall. Nicht gegen unabhängige reale Torwart-Matchoutcomes kalibriert.",
+    gkMeta27PaHint: "FM27 GK Meta v2.0 — PA\nDieselben sechs Gewichte auf der bisherigen PA-Projektion. Hypothetischer Entwicklungsindex, keine validierte Wahrscheinlichkeit für das Erreichen dieser Attribute oder Leistungen. Ohne Restpotenzial gleich Meta. Der Quellenbereich ist kein statistisches Konfidenzintervall.",
     verWarn: 'FM-Version {v} erkannt; das Auslesen ist auf {s}.x geeicht. Daten bis zu einem FMSuperScout-Update möglicherweise unzuverlässig.',
     verWarnOldDump: 'Diese Daten stammen von einem älteren FMSuperScout-Plugin. Alles funktioniert, aber hole frische Daten (F9 in FM mit geladenem Spielstand) für das beste Ergebnis.',
   },
@@ -1684,13 +1692,64 @@ const META_W = {
   Strength: 1.9, FirstTouch: 1.5, Composure: 1.2, WorkRate: 1.1, Finishing: 1.1, Flair: 1.1,
   LongShots: 1.0, Aggression: 1.0, Heading: 0.6, OffTheBall: 0.5,
 };
-// Keepers: eigen gewichten uit harvestgreen22's FM24-keeperhertest op FM-Arena
+// Legacy (FM26/unknown): harvestgreen22's FM24-keeperhertest op FM-Arena
 // (fm-arena.com/thread/18816, winrate-effect per attribuut, 2000-7000 wedstrijden per
 // meting). FM26-keeperdata bestaat nog niet; het totale keeperseffect is volgens dezelfde
 // test grofweg een kwart van dat van veldspelers. Pressure is bij ons een
 // persoonlijkheidsveld (p.pressure), geen attrs-key; weightedMeta pakt hem daar.
 const META_GK_W = { Reflexes: 12.8, Agility: 8.0, Acceleration: 4.7, Pressure: 4.1, Pace: 3.5, AerialReach: 3.4 };
+// FM27 GK Meta v2.0: avoided goals / 38 matches / +1 attribute, then normalize
+// each author's model separately and average 50/50. See docs/fm27-goalkeeper-meta-v2.md.
+const MAC_GK_BETA = Object.freeze({
+  Agility: 0.93, Reflexes: 0.76, AerialReach: 0.23,
+  Concentration: 0.08, Acceleration: 0.15, Handling: 0.11,
+});
+const PURITY_GK_BETA = Object.freeze({
+  Agility: 0.71, Reflexes: 0.65, AerialReach: 0.26,
+  Concentration: 0.17, Acceleration: 0.09, Handling: 0.04,
+});
+const GK_META27_KEYS = Object.freeze(Object.keys(MAC_GK_BETA));
+const MAC_GK_TOTAL = 2.26, PURITY_GK_TOTAL = 1.92;
+const GK_META27_W = Object.freeze(Object.fromEntries(GK_META27_KEYS.map(k =>
+  [k, (MAC_GK_BETA[k] / MAC_GK_TOTAL + PURITY_GK_BETA[k] / PURITY_GK_TOTAL) / 2])));
+
+// Pure: no imputation, partial reweighting, rounding or mutation. Centering at the
+// first value is algebraically the same weighted mean and preserves uniform inputs exactly.
+function gkMeta27Details(attrs) {
+  if (!attrs) return null;
+  const anchor = attrs.Agility;
+  let mac = 0, purity = 0;
+  for (const k of GK_META27_KEYS) {
+    const v = attrs[k];
+    if (!Number.isFinite(v) || v < 1 || v > 20) return null;
+    mac += MAC_GK_BETA[k] * (v - anchor);
+    purity += PURITY_GK_BETA[k] * (v - anchor);
+  }
+  const macScore = anchor + mac / MAC_GK_TOTAL;
+  const purityScore = anchor + purity / PURITY_GK_TOTAL;
+  return {
+    score: (macScore + purityScore) / 2, macScore, purityScore,
+    sensitivityMin: Math.min(macScore, purityScore),
+    sensitivityMax: Math.max(macScore, purityScore),
+    sourceSpread: Math.abs(macScore - purityScore),
+  };
+}
+const isFm27Gk = p => state.meta.game === 'FM27' && natPos(p).includes('GK');
+
+// Pure comparison within the FM27 model (caller supplies GK profiles from that game).
+// Strict agreement only: a tie in either model is SOURCE_SENSITIVE, not a probability.
+function compareGkMeta(playerA, playerB) {
+  if (!playerA || !playerB || !natPos(playerA).includes('GK') || !natPos(playerB).includes('GK')) return null;
+  const a = gkMeta27Details(playerA.attrs), b = gkMeta27Details(playerB.attrs);
+  if (!a || !b) return null;
+  const scoreDelta = a.score - b.score;
+  const macDelta = a.macScore - b.macScore, purityDelta = a.purityScore - b.purityScore;
+  const sourceStable = (macDelta > 0 && purityDelta > 0) || (macDelta < 0 && purityDelta < 0);
+  return { scoreDelta, macDelta, purityDelta, sourceStable,
+    stability: sourceStable ? 'SOURCE_STABLE' : 'SOURCE_SENSITIVE' };
+}
 function weightedMeta(p, attrs) {
+  if (isFm27Gk(p)) return gkMeta27Details(attrs)?.score ?? null;
   const W = natPos(p).includes('GK') ? META_GK_W : META_W;
   let sum = 0, w = 0;
   for (const k in W) {
@@ -1722,11 +1781,11 @@ function metaPaScore(p) {
 }
 function metaHtml(p) {
   const s = metaScore(p);
-  return s == null ? '<span class="dim">–</span>' : `<span class="${roleClass(s)}" data-help="metaLabel">${s.toFixed(1)}</span>`;
+  return s == null ? '<span class="dim">–</span>' : `<span class="${roleClass(s)}" data-help="${isFm27Gk(p) ? 'gkMeta27Hint' : 'metaHint'}">${s.toFixed(1)}</span>`;
 }
 function metaPaHtml(p) {
   const s = metaPaScore(p);
-  return s == null ? '<span class="dim">–</span>' : `<span class="${roleClass(s)}" data-help="metaPaHint">${s.toFixed(1)}</span>`;
+  return s == null ? '<span class="dim">–</span>' : `<span class="${roleClass(s)}" data-help="${isFm27Gk(p) ? 'gkMeta27PaHint' : 'metaPaHint'}">${s.toFixed(1)}</span>`;
 }
 // Groei in de tabel: dezelfde kleurtaal als de ontwikkelgrafiek. Nieuwe spelers krijgen
 // "nieuw" in plaats van een streepje, want dát is de informatie die je zoekt.
@@ -3144,8 +3203,8 @@ function showDetail(p) {
     ${p.ownerClub && p.ownerClub !== p.club ? `<div><b>${t('ownerLabel')}</b> ${escHtml(p.ownerClub)}</div>` : ''}
     ${p.transferTo ? `<div><b>${t('dealLabel')}</b> <span class="deal-txt">${escHtml(p.transferTo)}</span>${p.transferDate ? ` <span class="dim">· ${fmtDate(p.transferDate)}</span>` : ''}</div>` : ''}
     ${p.height ? `<div><b>${t('height')}</b> ${p.height} cm</div>` : ''}
-    ${isPlayer && !state.hideMeta && metaScore(p) != null ? `<div data-help="metaHint"><b>${t('metaLabel')}</b> <span class="${roleClass(metaScore(p))}">${metaScore(p).toFixed(1)}</span> <span class="col-help">?</span></div>` : ''}
-    ${isPlayer && !state.hideMeta && !state.hideCapa && metaPaScore(p) != null ? `<div data-help="metaPaHint"><b>${t('c_metapa')}</b> <span class="${roleClass(metaPaScore(p))}">${metaPaScore(p).toFixed(1)}</span> <span class="col-help">?</span></div>` : ''}
+    ${isPlayer && !state.hideMeta && metaScore(p) != null ? `<div data-help="${isFm27Gk(p) ? 'gkMeta27Hint' : 'metaHint'}"><b>${t('metaLabel')}</b> <span class="${roleClass(metaScore(p))}">${metaScore(p).toFixed(1)}</span> <span class="col-help">?</span></div>` : ''}
+    ${isPlayer && !state.hideMeta && !state.hideCapa && metaPaScore(p) != null ? `<div data-help="${isFm27Gk(p) ? 'gkMeta27PaHint' : 'metaPaHint'}"><b>${t('c_metapa')}</b> <span class="${roleClass(metaPaScore(p))}">${metaPaScore(p).toFixed(1)}</span> <span class="col-help">?</span></div>` : ''}
   </div>`;
 
   const flags = [];
@@ -3994,8 +4053,8 @@ function openCompare() {
     body += row('CA', players.map(p => p.ca));
     body += row('PA', players.map(p => p.pa));
   }
-  if (!state.hideMeta) body += row(t('c_meta'), players.map(p => metaScore(p)), { fmt: v => v.toFixed(1) });
-  if (!state.hideMeta && !state.hideCapa) body += row(t('c_metapa'), players.map(p => metaPaScore(p)), { fmt: v => v.toFixed(1) });
+  if (!state.hideMeta) body += row(isGk && state.meta.game === 'FM27' ? `<span data-help="gkMeta27Hint">${t('c_meta')}</span>` : t('c_meta'), players.map(p => metaScore(p)), { fmt: v => v.toFixed(1) });
+  if (!state.hideMeta && !state.hideCapa) body += row(isGk && state.meta.game === 'FM27' ? `<span data-help="gkMeta27PaHint">${t('c_metapa')}</span>` : t('c_metapa'), players.map(p => metaPaScore(p)), { fmt: v => v.toFixed(1) });
   body += row(t('cmpValue'), players.map(p => estValue(p).v), { fmt: fmtMoney, hi: null });
   if (!state.hideCapa)
     body += row(t('c_fee'), players.map(p => { const f = feeEstimate(p); return f.v > 0 ? f.v : null; }), { fmt: fmtMoney, hi: false });

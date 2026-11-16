@@ -559,7 +559,8 @@ input[type=number]::-webkit-outer-spin-button, input[type=number]::-webkit-inner
 .cmp-grid { display: grid; padding: 4px 0 6px; }
 /* kop als eigen sticky grid: namen + stamdata blijven boven de héle scroll staan */
 .cmp-headgrid { position: sticky; top: 0; z-index: 3; padding: 0; background: var(--bg3); box-shadow: 0 4px 10px -6px rgba(0,0,0,.7); }
-.cmp-row { display: grid; grid-template-columns: subgrid; grid-column: 1 / -1; }
+/* Older app browsers without subgrid inherit the parent's explicit column tracks. */
+.cmp-row { display: grid; grid-template-columns: inherit; grid-template-columns: subgrid; grid-column: 1 / -1; }
 .cmp-row:nth-child(even of .cmp-row) { background: rgba(255,255,255,.02); }
 .cmp-lbl, .cmp-cell { padding: 4px 12px; font-size: 12.5px; min-width: 0; }
 .cmp-lbl { color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
