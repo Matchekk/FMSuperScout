@@ -327,12 +327,12 @@ test('GK v2: only explicitly identified FM27 natural goalkeepers use v2', () => 
   assert.equal(app.metaScore(goalkeeper(gkAttrs(13),{posNat:['GK'],posArr:['DC']})),13);
 });
 
-test('GK v2: outfield weights and goalkeeper role ratings stay unchanged', () => {
+test('GK v2: legacy outfield weights and goalkeeper role ratings stay unchanged', () => {
   const expected={Pace:20.5,Acceleration:20.4,JumpingReach:11.6,Dribbling:9.8,Balance:5.3,Concentration:4.5,Anticipation:4.3,Determination:2.7,Agility:2.7,Stamina:2.5,Strength:1.9,FirstTouch:1.5,Composure:1.2,WorkRate:1.1,Finishing:1.1,Flair:1.1,LongShots:1,Aggression:1,Heading:.6,OffTheBall:.5};
   assert.deepEqual(M.META_W,expected);
   const p=player({attrs:Object.fromEntries(Object.keys(expected).map((k,i)=>[k,1+i%20]))});
   const manual=Object.entries(expected).reduce((s,[k,w])=>s+p.attrs[k]*w,0)/Object.values(expected).reduce((a,b)=>a+b,0);
-  for(const game of ['FM26','FM27',undefined]) {const app=loadApp();app.state.meta={game};near(app.metaScore(structuredClone(p)),manual);}
+  for(const game of ['FM26',undefined]) {const app=loadApp();app.state.meta={game};near(app.metaScore(structuredClone(p)),manual);}
   const app=fm27();const keeper=goalkeeper({...gkAttrs(),Passing:18,Kicking:19,OneOnOnes:9,Positioning:8});
   const roles=app.ROLES.filter(r=>r.pos.includes('GK'));assert.ok(roles.length>=2);
   for(const role of roles) {
@@ -428,4 +428,227 @@ test('GK v2: synthetic scenario report is reproducible and explicitly not outcom
   assert.equal(report.rows.find(r=>r.name==='Agility specialist').rankGain,3);
   const fs=require('node:fs'),path=require('node:path');
   assert.equal(markdown(report),fs.readFileSync(path.join(__dirname,'../docs/fm27-goalkeeper-meta-v2-scenarios.md'),'utf8'));
+});
+
+// ---------- FM27 Outfield Meta v2.0 ----------
+const OF_KEYS=['Acceleration','Pace','JumpingReach','Stamina','Anticipation','Balance','Strength','Finishing','Concentration','Dribbling'];
+const OF_POS={ST:'ST',CB:'DC',FB:'DL',DM:'DM',AM:'AMC',CM_PROXY:'MC',WM_PROXY:'ML',CB_PROXY:'SW'};
+// Independent transcription in hundredths from the original GD tables, not production shares.
+const OF_GOLD={
+ ST:{mac:[49,45,34,15,13,21,16,21,8,null],purity:[70,90,73,34,37,24,21,27,26,13]},
+ CB:{mac:[41,31,44,20,15,24,17,4,12,null],purity:[34,23,35,14,14,8,7,0,10,4]},
+ FB:{mac:[29,36,11,25,14,9,9,0,19,null],purity:[33,40,10,28,15,9,15,6,5,15]},
+ DM:{mac:[27,26,9,20,10,6,15,4,8,null],purity:[23,11,9,9,2,2,8,4,6,8]},
+ AM:{mac:[24,27,21,16,11,0,14,6,6,null],purity:[30,39,5,20,15,12,26,14,8,14]}
+};
+const outAttrs=(value=12,overrides={})=>({...Object.fromEntries(Object.keys(M.META_W).map(k=>[k,value])),...overrides});
+const outPlayer=(position='ST',attrs=outAttrs(),overrides={})=>player({pos:position,posArr:[position],attrs,...overrides});
+const handSource=(group,source,attrs)=>{
+ const mixture={CM_PROXY:{DM:.6,AM:.4},WM_PROXY:{FB:.5,AM:.5},CB_PROXY:{CB:1}}[group];
+ if(mixture)return Object.entries(mixture).reduce((sum,[base,w])=>sum+w*handSource(base,source,attrs),0);
+ const raw=OF_GOLD[group][source];return raw.reduce((sum,b,i)=>sum+(b===null?0:b*attrs[OF_KEYS[i]]),0)/raw.reduce((sum,b)=>sum+(b===null?0:b),0);
+};
+
+for(const [group,position] of Object.entries(OF_POS)) {
+ test(`Outfield v2 ${group}: exact uniform inputs and normalized source/ensemble weights`,()=>{
+  const app=fm27(),profile=app.FMSSOutfieldMeta27.model.profiles[group];
+  for(const value of [1,12,20]){
+   const d=app.outfieldMetaForPosition(outPlayer(position,outAttrs(value)),position);
+   assert.equal(d.score,value);assert.equal(d.macScore,value);assert.equal(d.purityScore,value);assert.equal(d.sourceSpread,0);
+  }
+  for(const weights of [profile.sources.mac,profile.sources.purity,profile.weights])near(Object.values(weights).reduce((a,b)=>a+b,0),1);
+  assert.equal(profile.requiredAttributes.length,10);
+ });
+ test(`Outfield v2 ${group}: independent hand arithmetic, bounds and monotonicity`,()=>{
+  const app=fm27();let seed=27;
+  const next=()=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/2**32;};
+  const samples=[outAttrs(1),outAttrs(20),outAttrs(12,{JumpingReach:20,Pace:6,Acceleration:8})];
+  for(let i=0;i<100;i++)samples.push(Object.fromEntries(OF_KEYS.map(k=>[k,1+19*next()])));
+  for(const attrs of samples){
+   const p=outPlayer(position,attrs),d=app.outfieldMetaForPosition(p,position);
+   near(d.macScore,handSource(group,'mac',attrs));near(d.purityScore,handSource(group,'purity',attrs));
+   near(d.score,(handSource(group,'mac',attrs)+handSource(group,'purity',attrs))/2);
+   assert.ok(d.score>=1&&d.score<=20);assert.ok(d.sourceMin>=1&&d.sourceMax<=20);
+   assert.equal(d.sourceMin,Math.min(d.macScore,d.purityScore));assert.equal(d.sourceMax,Math.max(d.macScore,d.purityScore));
+   assert.equal(d.sourceSpread,Math.abs(d.macScore-d.purityScore));
+   for(const k of OF_KEYS)if(attrs[k]<20){const up=app.outfieldMetaForPosition(outPlayer(position,{...attrs,[k]:Math.min(20,attrs[k]+1)}),position);assert.ok(up.score>d.score,k);}
+  }
+ });
+ test(`Outfield v2 ${group}: every required missing or invalid player attribute returns null`,()=>{
+  const app=fm27();
+  for(const k of OF_KEYS){
+   const missing=outAttrs();delete missing[k];assert.equal(app.outfieldMetaForPosition(outPlayer(position,missing),position),null,k);
+   for(const value of [null,undefined,NaN,Infinity,-Infinity,0,-1,20.1,'12',true]){
+    const p=outPlayer(position,outAttrs(12,{[k]:value}));
+    assert.equal(app.outfieldMetaForPosition(p,position),null,k);assert.equal(app.metaScore(p),null);assert.equal(app.metaPaScore(p),null);
+   }
+  }
+  assert.equal(app.outfieldMetaForPosition({posArr:[position]},position),null);
+ });
+}
+
+test('Outfield v2: source table provenance, missing Mac Dribbling, observed zeros and frozen model',()=>{
+ const app=fm27(),model=app.FMSSOutfieldMeta27.model;
+ for(const group of Object.keys(OF_GOLD))for(const source of ['mac','purity']){
+  const raw=model.profiles[group].raw[source];assert.ok(Object.isFrozen(raw));
+  for(let i=0;i<OF_KEYS.length;i++)assert.equal(raw[OF_KEYS[i]],OF_GOLD[group][source][i]===null?null:OF_GOLD[group][source][i]/100);
+ }
+ for(const group of Object.keys(OF_GOLD)){
+  const profile=model.profiles[group];assert.equal(profile.raw.mac.Dribbling,null);assert.equal(profile.sources.mac.Dribbling,0);
+  near(profile.weights.Dribbling,.5*profile.sources.purity.Dribbling);
+  const a=app.outfieldMetaForPosition(outPlayer(OF_POS[group]),OF_POS[group]);
+  const b=app.outfieldMetaForPosition(outPlayer(OF_POS[group],outAttrs(12,{Dribbling:13})),OF_POS[group]);
+  assert.equal(b.macScore,a.macScore);assert.ok(b.purityScore>a.purityScore);
+  assert.deepEqual(b.missingSourceCoefficients,{mac:['Dribbling'],purity:[]});
+ }
+ assert.equal(model.profiles.AM.raw.mac.Balance,0);assert.equal(model.profiles.FB.raw.mac.Finishing,0);
+ assert.equal(model.profiles.CB.raw.purity.Finishing,0);
+ assert.equal(app.FMSSOutfieldMeta27.normalizeSource({}),null);
+ assert.equal(app.FMSSOutfieldMeta27.normalizeSource(Object.fromEntries(OF_KEYS.map(k=>[k,0]))),null);
+ assert.equal(app.FMSSOutfieldMeta27.normalizeSource({Acceleration:Infinity}),null);
+ const clipped=app.FMSSOutfieldMeta27.normalizeSource({Acceleration:1,Pace:-1,Dribbling:null});
+ assert.equal(clipped.Acceleration,1);assert.equal(clipped.Pace,0);assert.equal(clipped.Dribbling,0);
+});
+
+test('Outfield v2: ST Finishing uses positive GD effects from BOTH sources, without rounding',()=>{
+ const app=fm27(),base=app.outfieldMetaForPosition(outPlayer(),'ST');
+ const finish=app.outfieldMetaForPosition(outPlayer('ST',outAttrs(12,{Finishing:13})),'ST');
+ near(finish.macScore-base.macScore,21/222);near(finish.purityScore-base.purityScore,27/415);
+ near(finish.score-base.score,(21/222+27/415)/2);
+ const pace=app.outfieldMetaForPosition(outPlayer('ST',outAttrs(12,{Pace:13})),'ST');
+ near(pace.score-base.score,(45/222+90/415)/2);assert.ok(pace.score>base.score);
+ const fraction=app.outfieldMetaForPosition(outPlayer('ST',outAttrs(12,{Finishing:12.01})),'ST');
+ assert.ok(fraction.score>12&&fraction.score<12.01);assert.notEqual(fraction.score,Number(fraction.score.toFixed(1)));
+});
+
+test('Outfield v2: asymmetric position differences, proxies and all FM position mappings',()=>{
+ const app=fm27(),attrs=outAttrs(12,{JumpingReach:20,Pace:6});
+ const cb=app.outfieldMetaForPosition(outPlayer('DC',attrs),'DC'),dm=app.outfieldMetaForPosition(outPlayer('DM',attrs),'DM');
+ assert.ok(cb.score>dm.score);
+ const scores=Object.keys(OF_GOLD).map(group=>app.outfieldMetaForPosition(outPlayer(OF_POS[group],attrs),OF_POS[group]).score);
+ assert.equal(new Set(scores).size,5);
+ for(const [position,mapping] of Object.entries(app.FMSSOutfieldMeta27.model.positions)){
+  const d=app.outfieldMetaForPosition(outPlayer(position,attrs),position);assert.equal(d.positionGroup,mapping.group);assert.equal(d.evidenceStatus,mapping.evidence);
+ }
+ assert.equal(app.outfieldMetaForPosition(outPlayer('AMC'),'AMC').evidenceStatus,'TRANSFER_CENTRAL_AM');
+ for(const source of ['mac','purity'])for(const k of OF_KEYS){
+  const p=app.FMSSOutfieldMeta27.model.profiles;
+  near(p.CM_PROXY.sources[source][k],.6*p.DM.sources[source][k]+.4*p.AM.sources[source][k]);
+  near(p.WM_PROXY.sources[source][k],.5*p.FB.sources[source][k]+.5*p.AM.sources[source][k]);
+ }
+});
+
+test('Outfield v2: multiposition default is natural preferred position, never the maximum score',()=>{
+ const app=fm27(),attrs=outAttrs(12,{JumpingReach:20,Pace:5,Strength:18});
+ const p=outPlayer('ST',attrs,{posArr:['ST','AMC'],posNat:['ST','AMC']});
+ assert.equal(app.FMSSOutfieldMeta27.defaultPosition(p),'ST');
+ near(app.metaScore(p),app.outfieldMetaForPosition(p,'ST').score);
+ const fallback=outPlayer('ST / AMC',attrs,{posArr:['ST','AMC']});
+ assert.equal(app.FMSSOutfieldMeta27.defaultPosition(fallback),'AMC');
+ assert.equal(app.FMSSOutfieldMeta27.defaultPosition({...fallback,posArr:['AMC','ST']}),'AMC');
+ assert.ok(app.outfieldMetaForPosition(fallback,'ST').score>app.outfieldMetaForPosition(fallback,'AMC').score);
+ near(app.metaScore(fallback),app.outfieldMetaForPosition(fallback,'AMC').score);
+ assert.equal(app.FMSSOutfieldMeta27.defaultPosition(outPlayer('ST',attrs,{posNat:['DC'],posArr:['ST','DC']})),'DC');
+ for(const p of [{attrs},outPlayer('UNKNOWN'),outPlayer('ST',attrs,{posNat:[]})])assert.equal(app.metaScore(p),null);
+ assert.equal(app.outfieldMetaForPosition(outPlayer(),'UNKNOWN'),null);
+ assert.equal(app.outfieldMetaForPosition(goalkeeper(),'ST'),null);
+ // Explicit deployment does not invent familiarity, even if not a natural position.
+ assert.ok(app.outfieldMetaForPosition(outPlayer('ST',attrs),'DC'));
+});
+
+test('Outfield v2: same-family source comparisons, ties, disagreements and proxy classification',()=>{
+ const app=fm27();assert.equal(app.compareOutfieldMeta(outPlayer('ST',outAttrs(13)),outPlayer()).stability,'SOURCE_STABLE');
+ assert.equal(app.compareOutfieldMeta(outPlayer(),outPlayer()).stability,'SOURCE_SENSITIVE');
+ const disagreement=app.compareOutfieldMeta(outPlayer('ST',outAttrs(12,{Finishing:13})),outPlayer('ST',outAttrs(12,{Anticipation:13})));
+ assert.ok(disagreement.macDelta>0&&disagreement.purityDelta<0);assert.equal(disagreement.stability,'SOURCE_SENSITIVE');
+ for(const pos of ['MC','ML','MR','SW'])assert.equal(app.compareOutfieldMeta(outPlayer(pos,outAttrs(13)),outPlayer(pos)).stability,'PROXY_MODEL');
+ assert.equal(app.compareOutfieldMeta(outPlayer('ST'),outPlayer('DC')),null);
+ assert.equal(app.compareOutfieldMeta(outPlayer('ST',{}),outPlayer('ST')),null);
+});
+
+test('Outfield v2: version changes, new objects and replaced attribute data invalidate scalar caches',()=>{
+ const app=fm27(),p=outPlayer('ST',outAttrs(12,{Finishing:19,Pace:7}));
+ const snapshot=structuredClone(p),v2=app.metaScore(p),v2pa=app.metaPaScore(p);
+ assert.deepEqual(p,snapshot,'scoring must not add memo fields to player objects');
+ for(const game of ['FM26',undefined,'fm27','FM28']){
+  app.state.meta.game=game;
+  const legacy=Object.entries(app.META_W).reduce((n,[k,w])=>n+p.attrs[k]*w,0)/Object.values(app.META_W).reduce((a,b)=>a+b,0);
+  near(app.metaScore(p),legacy);assert.notEqual(app.metaScore(p),v2);
+ }
+ app.state.meta.game='FM27';near(app.metaScore(p),v2);near(app.metaPaScore(p),v2pa);
+ const replacement=outPlayer('ST',outAttrs(18),{id:p.id});assert.equal(app.metaScore(replacement),18);
+ p.attrs=outAttrs(16);assert.equal(app.metaScore(p),16);
+ app.state.meta={game:'FM27'};assert.equal(app.metaScore(p),16);
+ p.pos='DC';p.posArr=['DC'];near(app.metaScore(p),app.outfieldMetaForPosition(p,'DC').score);
+ // Supplied memo fields on an imported/cloned object are never trusted.
+ assert.equal(app.metaScore(outPlayer('ST',outAttrs(10),{_meta:20,_metaPa:20})),10);
+});
+
+test('Outfield v2: frozen players are unchanged; PA uses unchanged projection and source model',()=>{
+ const app=fm27(),p=outPlayer('MC',outAttrs(12,{Finishing:16,Pace:9}),{ca:100,pa:160,birthYear:2008});
+ Object.freeze(p.attrs);Object.freeze(p.posArr);Object.freeze(p);
+ const before=JSON.stringify(p),proj=app.projectAttrs(p);
+ const expected=Math.max(app.outfieldMetaForPosition(p,'MC').score,app.outfieldMetaForPosition(p,'MC',proj).score);
+ near(app.metaPaScore(p),expected);assert.equal(JSON.stringify(p),before);
+ const mature=outPlayer('ST',outAttrs(),{ca:150,pa:150});assert.equal(app.metaPaScore(mature),app.metaScore(mature));
+});
+
+test('Outfield v2: GK math, legacy weights, roles, prices and interest are not replaced',()=>{
+ const app=fm27(),keeper=goalkeeper(gkAttrs(12,{Agility:16,Reflexes:16,AerialReach:13}));
+ near(app.metaScore(keeper),15.03083517699115);
+ const p=outPlayer('ST',outAttrs(12,{Finishing:17,Pace:8}));
+ app.state.meta.game='FM26';const legacy=app.metaScore(p),roles=app.bestRoles(p),value=app.estValue(p),fee=app.feeEstimate(p),interest=app.interestEstimate(p);
+ app.state.meta.game='FM27';assert.notEqual(app.metaScore(p),legacy);
+ assert.deepEqual(app.bestRoles(p),roles);assert.deepEqual(app.estValue(p),value);assert.deepEqual(app.feeEstimate(p),fee);assert.deepEqual(app.interestEstimate(p),interest);
+});
+
+test('Outfield v2: table, filters, profile, comparison, card and translations use the new model',()=>{
+ const rendered={},input=()=>({value:'',addEventListener(){},classList:{toggle(){}}});
+ const elements={'f-meta-min':input(),'f-metapa-min':input()};
+ const app=fm27({elements,onElementSet:(id,prop,value)=>{if(prop==='innerHTML')rendered[id]=value;}});
+ const a=outPlayer('ST',outAttrs(12,{Finishing:19}),{id:2,posArr:['ST','AMC']}),b=outPlayer('ST',outAttrs(11),{id:3});
+ app.state.players=[b,a];app.state.filtered=[b,a];app.state.sortKey='meta';app.state.sortDir=-1;app.sortRows();assert.deepEqual(app.state.filtered,[a,b]);
+ elements['f-meta-min'].value='12';app.applyFilters();assert.deepEqual(app.state.filtered,[a]);
+ elements['f-meta-min'].value='';elements['f-metapa-min'].value='14';app.applyFilters();assert.deepEqual(app.state.filtered,[]);
+ elements['f-metapa-min'].value='';app.applyFilters();
+ const score=app.metaScore(a).toFixed(1);assert.ok(app.metaHtml(a).includes('>'+score+'</span>'));
+ assert.match(app.metaHtml(a),/data-tip=/);assert.equal(app.buildCardModel(a).hexNum,score);
+ app.showDetail(a);assert.ok(rendered['detail-body'].includes('FM27 Meta'));assert.match(rendered['detail-body'],/ST/);assert.match(rendered['detail-body'],/AMC/);
+ app.state.compare=[2,3];app.openCompare();assert.match(rendered['compare-inner'],/data-tip=/);assert.ok(rendered['compare-inner'].includes('>'+score+'</span>'));
+ for(const lang of ['en','de','fr','nl']){
+  app.state.lang=lang;assert.match(app.outfieldMetaTip(a),/FM27 Outfield Meta v2\.0/);assert.match(app.outfieldMetaTip(a),/50\/50/);
+  assert.ok(!app.outfieldMetaTip(a).includes('{position}'));assert.match(app.outfieldMetaTip(a,true),/PA/);
+ }
+});
+
+test('Outfield v2: published JSON is the actual production specification and packaging includes the module',()=>{
+ const fs=require('node:fs'),path=require('node:path'),app=fm27();
+ assert.deepEqual(JSON.parse(fs.readFileSync(path.join(__dirname,'../docs/fm27-outfield-meta-v2-model.json'),'utf8')),app.FMSSOutfieldMeta27.model);
+ const html=fs.readFileSync(path.join(__dirname,'../app/index.html'),'utf8');assert.ok(html.indexOf('src="outfield-meta27.js"')<html.indexOf('src="app.js"'));
+ for(const file of ['build-exe.ps1','build-package.ps1'])assert.ok(fs.readFileSync(path.join(__dirname,'../installer',file),'utf8').includes("'outfield-meta27.js'"));
+});
+
+test('Outfield v2: repeated scalar sort lookups do not read attributes or grow player fields',()=>{
+ const app=fm27();let reads=0;
+ const attrs=new Proxy(outAttrs(),{get(target,key){reads++;return target[key];}});
+ const p=outPlayer('ST',attrs),fields=Object.keys(p);
+ app.metaScore(p);const currentReads=reads;
+ for(let i=0;i<1000;i++)assert.equal(app.metaScore(p),12);
+ assert.equal(reads,currentReads);app.metaPaScore(p);const paReads=reads;
+ for(let i=0;i<1000;i++)app.metaPaScore(p);
+ assert.equal(reads,paReads);assert.deepEqual(Object.keys(p),fields);
+});
+
+test('Outfield v2: ten-profile scenario report is deterministic and ranks within one deployment',()=>{
+ const {scenarioReport,markdown}=require('../tools/compare-outfield-meta');
+ const report=scenarioReport();assert.equal(report.ownPosition.length,10);
+ assert.equal(report.kind,'SYNTHETIC_SOFTWARE_SCENARIOS_NOT_OUTCOME_VALIDATION');
+ assert.ok(report.ownPosition.every(r=>r.newRank===undefined));
+ for(const [position,rows] of Object.entries(report.byDeployment)){
+  assert.equal(rows.length,10);assert.ok(rows.every(r=>r.position===position));
+  for(let i=1;i<rows.length;i++)assert.ok(rows[i-1].score>=rows[i].score);
+  assert.ok(rows.some(r=>r.rankGain!==0));
+ }
+ const fs=require('node:fs'),path=require('node:path');
+ assert.equal(markdown(report),fs.readFileSync(path.join(__dirname,'../docs/fm27-outfield-meta-v2-scenarios.md'),'utf8'));
 });

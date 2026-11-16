@@ -59,16 +59,18 @@ function loadApp(options = {}) {
     'gkMeta27Details', 'compareGkMeta', 'MAC_GK_BETA', 'PURITY_GK_BETA', 'GK_META27_W',
     'META_W', 'META_GK_W', 'weightedMeta', 'metaHtml', 'metaPaHtml', 'PLAYER_COLS',
     'applyFilters', 'sortRows', 'showDetail', 'openCompare', 'buildCardModel', 'loadDump', 'parseDumpStream',
+    'FMSSOutfieldMeta27', 'outfieldMetaForPosition', 'compareOutfieldMeta', 'outfieldMetaTip', 'outfieldPositionsHtml',
   ];
   const body = src + '\n;return {' + exposed.map(n => `${n}: typeof ${n} !== 'undefined' ? ${n} : undefined`).join(',') + '};';
   const factory = new Function(
     'document', 'window', 'localStorage', 'navigator', 'fetch',
-    'setTimeout', 'setInterval', 'clearTimeout', 'clearInterval', 'console',
+    'setTimeout', 'setInterval', 'clearTimeout', 'clearInterval', 'console', 'FMSSOutfieldMeta27',
     body,
   );
   return factory(
     documentStub, windowStub, localStorageStub, navigatorStub, options.fetch || fetchStub,
     options.setTimeout || noopTimer, noopTimer, () => {}, () => {}, console,
+    require(path.join(path.dirname(options.sourcePath || path.join(__dirname, '..', 'app', 'app.js')), 'outfield-meta27.js')),
   );
 }
 

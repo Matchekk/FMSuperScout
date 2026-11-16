@@ -1,0 +1,723 @@
+{
+  "modelVersion": "FM27_OUTFIELD_META_V2.0",
+  "scale": [
+    1,
+    20
+  ],
+  "endpoint": "Goal difference / 38 matches / +1 attribute in one player",
+  "sourceShares": {
+    "mac": 0.5,
+    "purity": 0.5
+  },
+  "sources": {
+    "mac": {
+      "url": "https://github.com/caiograco289/Fm-Match-Lab/blob/9bc29019adc87cf45138c462e96c4e19077a0381/docs/studies/13b-value-by-position-random.md#goal-difference",
+      "matches": 50000,
+      "context": "Gegenpress; Catenaccio 34340 is same-family sensitivity, not another vote"
+    },
+    "purity": {
+      "url": "https://fm-arena.com/threads/attribute-importance-by-position-in-fm27-a-test-on-my-own-tactic.125/",
+      "matches": 200000,
+      "configurations": 50000,
+      "seeds": 4,
+      "context": "Brentford 3-4-2-1; WB maps to FB, central AM transfers to AM family"
+    },
+    "precursor": {
+      "url": "https://github.com/Matchekk/FM-27-Research/blob/0a1e0ad1575e484b6377f2d761ffd5e16af36b8a/research/meta_score_v01_weights.json",
+      "role": "Raw-table starting point, checked against original sources; no borrowed Mac Dribbling or rounded v0.1 weights"
+    }
+  },
+  "positions": {
+    "ST": {
+      "group": "ST",
+      "evidence": "DIRECT_POSITION_FAMILY"
+    },
+    "DC": {
+      "group": "CB",
+      "evidence": "DIRECT_POSITION_FAMILY"
+    },
+    "DL": {
+      "group": "FB",
+      "evidence": "TRANSFER_FB_WB"
+    },
+    "DR": {
+      "group": "FB",
+      "evidence": "TRANSFER_FB_WB"
+    },
+    "WBL": {
+      "group": "FB",
+      "evidence": "TRANSFER_FB_WB"
+    },
+    "WBR": {
+      "group": "FB",
+      "evidence": "TRANSFER_FB_WB"
+    },
+    "DM": {
+      "group": "DM",
+      "evidence": "DIRECT_POSITION_FAMILY"
+    },
+    "AML": {
+      "group": "AM",
+      "evidence": "TRANSFER_WIDE_CENTRAL_AM"
+    },
+    "AMR": {
+      "group": "AM",
+      "evidence": "TRANSFER_WIDE_CENTRAL_AM"
+    },
+    "AMC": {
+      "group": "AM",
+      "evidence": "TRANSFER_CENTRAL_AM"
+    },
+    "MC": {
+      "group": "CM_PROXY",
+      "evidence": "PROXY_MODEL"
+    },
+    "ML": {
+      "group": "WM_PROXY",
+      "evidence": "PROXY_MODEL"
+    },
+    "MR": {
+      "group": "WM_PROXY",
+      "evidence": "PROXY_MODEL"
+    },
+    "SW": {
+      "group": "CB_PROXY",
+      "evidence": "PROXY_MODEL"
+    }
+  },
+  "defaultPositionOrder": [
+    "SW",
+    "DC",
+    "DL",
+    "DR",
+    "WBL",
+    "WBR",
+    "DM",
+    "MC",
+    "ML",
+    "MR",
+    "AMC",
+    "AML",
+    "AMR",
+    "ST"
+  ],
+  "profiles": {
+    "ST": {
+      "raw": {
+        "mac": {
+          "Acceleration": 0.49,
+          "Pace": 0.45,
+          "JumpingReach": 0.34,
+          "Stamina": 0.15,
+          "Anticipation": 0.13,
+          "Balance": 0.21,
+          "Strength": 0.16,
+          "Finishing": 0.21,
+          "Concentration": 0.08,
+          "Dribbling": null
+        },
+        "purity": {
+          "Acceleration": 0.7,
+          "Pace": 0.9,
+          "JumpingReach": 0.73,
+          "Stamina": 0.34,
+          "Anticipation": 0.37,
+          "Balance": 0.24,
+          "Strength": 0.21,
+          "Finishing": 0.27,
+          "Concentration": 0.26,
+          "Dribbling": 0.13
+        }
+      },
+      "sources": {
+        "mac": {
+          "Acceleration": 0.2207207207207207,
+          "Pace": 0.2027027027027027,
+          "JumpingReach": 0.15315315315315314,
+          "Stamina": 0.06756756756756756,
+          "Anticipation": 0.05855855855855856,
+          "Balance": 0.09459459459459459,
+          "Strength": 0.07207207207207207,
+          "Finishing": 0.09459459459459459,
+          "Concentration": 0.036036036036036036,
+          "Dribbling": 0
+        },
+        "purity": {
+          "Acceleration": 0.1686746987951807,
+          "Pace": 0.21686746987951805,
+          "JumpingReach": 0.17590361445783131,
+          "Stamina": 0.0819277108433735,
+          "Anticipation": 0.08915662650602409,
+          "Balance": 0.057831325301204814,
+          "Strength": 0.05060240963855421,
+          "Finishing": 0.06506024096385542,
+          "Concentration": 0.06265060240963854,
+          "Dribbling": 0.03132530120481927
+        }
+      },
+      "weights": {
+        "Acceleration": 0.1946977097579507,
+        "Pace": 0.20978508629111037,
+        "JumpingReach": 0.16452838380549223,
+        "Stamina": 0.07474763920547053,
+        "Anticipation": 0.07385759253229132,
+        "Balance": 0.0762129599478997,
+        "Strength": 0.06133724085531314,
+        "Finishing": 0.079827417779225,
+        "Concentration": 0.04934331922283729,
+        "Dribbling": 0.015662650602409636
+      },
+      "requiredAttributes": [
+        "Acceleration",
+        "Pace",
+        "JumpingReach",
+        "Stamina",
+        "Anticipation",
+        "Balance",
+        "Strength",
+        "Finishing",
+        "Concentration",
+        "Dribbling"
+      ],
+      "missingSourceCoefficients": {
+        "mac": [
+          "Dribbling"
+        ],
+        "purity": []
+      }
+    },
+    "CB": {
+      "raw": {
+        "mac": {
+          "Acceleration": 0.41,
+          "Pace": 0.31,
+          "JumpingReach": 0.44,
+          "Stamina": 0.2,
+          "Anticipation": 0.15,
+          "Balance": 0.24,
+          "Strength": 0.17,
+          "Finishing": 0.04,
+          "Concentration": 0.12,
+          "Dribbling": null
+        },
+        "purity": {
+          "Acceleration": 0.34,
+          "Pace": 0.23,
+          "JumpingReach": 0.35,
+          "Stamina": 0.14,
+          "Anticipation": 0.14,
+          "Balance": 0.08,
+          "Strength": 0.07,
+          "Finishing": 0,
+          "Concentration": 0.1,
+          "Dribbling": 0.04
+        }
+      },
+      "sources": {
+        "mac": {
+          "Acceleration": 0.19711538461538464,
+          "Pace": 0.14903846153846156,
+          "JumpingReach": 0.21153846153846156,
+          "Stamina": 0.09615384615384617,
+          "Anticipation": 0.07211538461538462,
+          "Balance": 0.1153846153846154,
+          "Strength": 0.08173076923076925,
+          "Finishing": 0.019230769230769235,
+          "Concentration": 0.0576923076923077,
+          "Dribbling": 0
+        },
+        "purity": {
+          "Acceleration": 0.2281879194630872,
+          "Pace": 0.15436241610738252,
+          "JumpingReach": 0.2348993288590603,
+          "Stamina": 0.09395973154362414,
+          "Anticipation": 0.09395973154362414,
+          "Balance": 0.05369127516778522,
+          "Strength": 0.04697986577181207,
+          "Finishing": 0,
+          "Concentration": 0.06711409395973153,
+          "Dribbling": 0.02684563758389261
+        }
+      },
+      "weights": {
+        "Acceleration": 0.21265165203923592,
+        "Pace": 0.15170043882292206,
+        "JumpingReach": 0.22321889519876092,
+        "Stamina": 0.09505678884873515,
+        "Anticipation": 0.08303755807950439,
+        "Balance": 0.08453794527620032,
+        "Strength": 0.06435531750129066,
+        "Finishing": 0.009615384615384618,
+        "Concentration": 0.06240320082601962,
+        "Dribbling": 0.013422818791946305
+      },
+      "requiredAttributes": [
+        "Acceleration",
+        "Pace",
+        "JumpingReach",
+        "Stamina",
+        "Anticipation",
+        "Balance",
+        "Strength",
+        "Finishing",
+        "Concentration",
+        "Dribbling"
+      ],
+      "missingSourceCoefficients": {
+        "mac": [
+          "Dribbling"
+        ],
+        "purity": []
+      }
+    },
+    "FB": {
+      "raw": {
+        "mac": {
+          "Acceleration": 0.29,
+          "Pace": 0.36,
+          "JumpingReach": 0.11,
+          "Stamina": 0.25,
+          "Anticipation": 0.14,
+          "Balance": 0.09,
+          "Strength": 0.09,
+          "Finishing": 0,
+          "Concentration": 0.19,
+          "Dribbling": null
+        },
+        "purity": {
+          "Acceleration": 0.33,
+          "Pace": 0.4,
+          "JumpingReach": 0.1,
+          "Stamina": 0.28,
+          "Anticipation": 0.15,
+          "Balance": 0.09,
+          "Strength": 0.15,
+          "Finishing": 0.06,
+          "Concentration": 0.05,
+          "Dribbling": 0.15
+        }
+      },
+      "sources": {
+        "mac": {
+          "Acceleration": 0.1907894736842105,
+          "Pace": 0.23684210526315788,
+          "JumpingReach": 0.07236842105263158,
+          "Stamina": 0.16447368421052633,
+          "Anticipation": 0.09210526315789475,
+          "Balance": 0.05921052631578947,
+          "Strength": 0.05921052631578947,
+          "Finishing": 0,
+          "Concentration": 0.125,
+          "Dribbling": 0
+        },
+        "purity": {
+          "Acceleration": 0.18750000000000003,
+          "Pace": 0.22727272727272732,
+          "JumpingReach": 0.05681818181818183,
+          "Stamina": 0.15909090909090912,
+          "Anticipation": 0.08522727272727273,
+          "Balance": 0.05113636363636364,
+          "Strength": 0.08522727272727273,
+          "Finishing": 0.034090909090909095,
+          "Concentration": 0.028409090909090915,
+          "Dribbling": 0.08522727272727273
+        }
+      },
+      "weights": {
+        "Acceleration": 0.18914473684210525,
+        "Pace": 0.2320574162679426,
+        "JumpingReach": 0.0645933014354067,
+        "Stamina": 0.16178229665071772,
+        "Anticipation": 0.08866626794258374,
+        "Balance": 0.055173444976076555,
+        "Strength": 0.0722188995215311,
+        "Finishing": 0.017045454545454548,
+        "Concentration": 0.07670454545454546,
+        "Dribbling": 0.04261363636363637
+      },
+      "requiredAttributes": [
+        "Acceleration",
+        "Pace",
+        "JumpingReach",
+        "Stamina",
+        "Anticipation",
+        "Balance",
+        "Strength",
+        "Finishing",
+        "Concentration",
+        "Dribbling"
+      ],
+      "missingSourceCoefficients": {
+        "mac": [
+          "Dribbling"
+        ],
+        "purity": []
+      }
+    },
+    "DM": {
+      "raw": {
+        "mac": {
+          "Acceleration": 0.27,
+          "Pace": 0.26,
+          "JumpingReach": 0.09,
+          "Stamina": 0.2,
+          "Anticipation": 0.1,
+          "Balance": 0.06,
+          "Strength": 0.15,
+          "Finishing": 0.04,
+          "Concentration": 0.08,
+          "Dribbling": null
+        },
+        "purity": {
+          "Acceleration": 0.23,
+          "Pace": 0.11,
+          "JumpingReach": 0.09,
+          "Stamina": 0.09,
+          "Anticipation": 0.02,
+          "Balance": 0.02,
+          "Strength": 0.08,
+          "Finishing": 0.04,
+          "Concentration": 0.06,
+          "Dribbling": 0.08
+        }
+      },
+      "sources": {
+        "mac": {
+          "Acceleration": 0.21600000000000003,
+          "Pace": 0.20800000000000002,
+          "JumpingReach": 0.072,
+          "Stamina": 0.16,
+          "Anticipation": 0.08,
+          "Balance": 0.048,
+          "Strength": 0.12,
+          "Finishing": 0.032,
+          "Concentration": 0.064,
+          "Dribbling": 0
+        },
+        "purity": {
+          "Acceleration": 0.2804878048780488,
+          "Pace": 0.13414634146341464,
+          "JumpingReach": 0.10975609756097561,
+          "Stamina": 0.10975609756097561,
+          "Anticipation": 0.024390243902439025,
+          "Balance": 0.024390243902439025,
+          "Strength": 0.0975609756097561,
+          "Finishing": 0.04878048780487805,
+          "Concentration": 0.07317073170731707,
+          "Dribbling": 0.0975609756097561
+        }
+      },
+      "weights": {
+        "Acceleration": 0.24824390243902442,
+        "Pace": 0.17107317073170733,
+        "JumpingReach": 0.0908780487804878,
+        "Stamina": 0.1348780487804878,
+        "Anticipation": 0.05219512195121952,
+        "Balance": 0.03619512195121952,
+        "Strength": 0.10878048780487805,
+        "Finishing": 0.040390243902439026,
+        "Concentration": 0.06858536585365854,
+        "Dribbling": 0.04878048780487805
+      },
+      "requiredAttributes": [
+        "Acceleration",
+        "Pace",
+        "JumpingReach",
+        "Stamina",
+        "Anticipation",
+        "Balance",
+        "Strength",
+        "Finishing",
+        "Concentration",
+        "Dribbling"
+      ],
+      "missingSourceCoefficients": {
+        "mac": [
+          "Dribbling"
+        ],
+        "purity": []
+      }
+    },
+    "AM": {
+      "raw": {
+        "mac": {
+          "Acceleration": 0.24,
+          "Pace": 0.27,
+          "JumpingReach": 0.21,
+          "Stamina": 0.16,
+          "Anticipation": 0.11,
+          "Balance": 0,
+          "Strength": 0.14,
+          "Finishing": 0.06,
+          "Concentration": 0.06,
+          "Dribbling": null
+        },
+        "purity": {
+          "Acceleration": 0.3,
+          "Pace": 0.39,
+          "JumpingReach": 0.05,
+          "Stamina": 0.2,
+          "Anticipation": 0.15,
+          "Balance": 0.12,
+          "Strength": 0.26,
+          "Finishing": 0.14,
+          "Concentration": 0.08,
+          "Dribbling": 0.14
+        }
+      },
+      "sources": {
+        "mac": {
+          "Acceleration": 0.192,
+          "Pace": 0.21600000000000003,
+          "JumpingReach": 0.16799999999999998,
+          "Stamina": 0.128,
+          "Anticipation": 0.088,
+          "Balance": 0,
+          "Strength": 0.11200000000000002,
+          "Finishing": 0.048,
+          "Concentration": 0.048,
+          "Dribbling": 0
+        },
+        "purity": {
+          "Acceleration": 0.16393442622950818,
+          "Pace": 0.21311475409836064,
+          "JumpingReach": 0.0273224043715847,
+          "Stamina": 0.1092896174863388,
+          "Anticipation": 0.08196721311475409,
+          "Balance": 0.06557377049180327,
+          "Strength": 0.14207650273224043,
+          "Finishing": 0.07650273224043716,
+          "Concentration": 0.04371584699453552,
+          "Dribbling": 0.07650273224043716
+        }
+      },
+      "weights": {
+        "Acceleration": 0.1779672131147541,
+        "Pace": 0.21455737704918032,
+        "JumpingReach": 0.09766120218579234,
+        "Stamina": 0.1186448087431694,
+        "Anticipation": 0.08498360655737705,
+        "Balance": 0.032786885245901634,
+        "Strength": 0.12703825136612024,
+        "Finishing": 0.06225136612021858,
+        "Concentration": 0.045857923497267764,
+        "Dribbling": 0.03825136612021858
+      },
+      "requiredAttributes": [
+        "Acceleration",
+        "Pace",
+        "JumpingReach",
+        "Stamina",
+        "Anticipation",
+        "Balance",
+        "Strength",
+        "Finishing",
+        "Concentration",
+        "Dribbling"
+      ],
+      "missingSourceCoefficients": {
+        "mac": [
+          "Dribbling"
+        ],
+        "purity": []
+      }
+    },
+    "CM_PROXY": {
+      "raw": null,
+      "mixture": {
+        "DM": 0.6,
+        "AM": 0.4
+      },
+      "sources": {
+        "mac": {
+          "Acceleration": 0.20640000000000003,
+          "Pace": 0.21120000000000003,
+          "JumpingReach": 0.1104,
+          "Stamina": 0.1472,
+          "Anticipation": 0.0832,
+          "Balance": 0.0288,
+          "Strength": 0.1168,
+          "Finishing": 0.038400000000000004,
+          "Concentration": 0.0576,
+          "Dribbling": 0
+        },
+        "purity": {
+          "Acceleration": 0.23386645341863255,
+          "Pace": 0.16573370651739305,
+          "JumpingReach": 0.07678262028521925,
+          "Stamina": 0.10956950553112088,
+          "Anticipation": 0.047421031587365055,
+          "Balance": 0.04086365453818472,
+          "Strength": 0.11536718645874983,
+          "Finishing": 0.059869385579101694,
+          "Concentration": 0.06138877782220445,
+          "Dribbling": 0.08913767826202852
+        }
+      },
+      "weights": {
+        "Acceleration": 0.2201332267093163,
+        "Pace": 0.18846685325869655,
+        "JumpingReach": 0.09359131014260963,
+        "Stamina": 0.12838475276556044,
+        "Anticipation": 0.06531051579368252,
+        "Balance": 0.034831827269092355,
+        "Strength": 0.11608359322937492,
+        "Finishing": 0.04913469278955085,
+        "Concentration": 0.059494388911102224,
+        "Dribbling": 0.04456883913101426
+      },
+      "requiredAttributes": [
+        "Acceleration",
+        "Pace",
+        "JumpingReach",
+        "Stamina",
+        "Anticipation",
+        "Balance",
+        "Strength",
+        "Finishing",
+        "Concentration",
+        "Dribbling"
+      ],
+      "missingSourceCoefficients": {
+        "mac": [
+          "Dribbling"
+        ],
+        "purity": []
+      }
+    },
+    "WM_PROXY": {
+      "raw": null,
+      "mixture": {
+        "FB": 0.5,
+        "AM": 0.5
+      },
+      "sources": {
+        "mac": {
+          "Acceleration": 0.19139473684210526,
+          "Pace": 0.22642105263157897,
+          "JumpingReach": 0.12018421052631578,
+          "Stamina": 0.14623684210526317,
+          "Anticipation": 0.09005263157894737,
+          "Balance": 0.029605263157894735,
+          "Strength": 0.08560526315789474,
+          "Finishing": 0.024,
+          "Concentration": 0.0865,
+          "Dribbling": 0
+        },
+        "purity": {
+          "Acceleration": 0.1757172131147541,
+          "Pace": 0.22019374068554398,
+          "JumpingReach": 0.04207029309488326,
+          "Stamina": 0.13419026328862396,
+          "Anticipation": 0.08359724292101342,
+          "Balance": 0.05835506706408346,
+          "Strength": 0.11365188772975658,
+          "Finishing": 0.055296820665673124,
+          "Concentration": 0.03606246895181322,
+          "Dribbling": 0.08086500248385495
+        }
+      },
+      "weights": {
+        "Acceleration": 0.18355597497842968,
+        "Pace": 0.22330739665856147,
+        "JumpingReach": 0.08112725181059952,
+        "Stamina": 0.14021355269694358,
+        "Anticipation": 0.08682493724998039,
+        "Balance": 0.043980165110989095,
+        "Strength": 0.09962857544382567,
+        "Finishing": 0.03964841033283656,
+        "Concentration": 0.06128123447590661,
+        "Dribbling": 0.040432501241927474
+      },
+      "requiredAttributes": [
+        "Acceleration",
+        "Pace",
+        "JumpingReach",
+        "Stamina",
+        "Anticipation",
+        "Balance",
+        "Strength",
+        "Finishing",
+        "Concentration",
+        "Dribbling"
+      ],
+      "missingSourceCoefficients": {
+        "mac": [
+          "Dribbling"
+        ],
+        "purity": []
+      }
+    },
+    "CB_PROXY": {
+      "raw": null,
+      "mixture": {
+        "CB": 1
+      },
+      "sources": {
+        "mac": {
+          "Acceleration": 0.19711538461538464,
+          "Pace": 0.14903846153846156,
+          "JumpingReach": 0.21153846153846156,
+          "Stamina": 0.09615384615384617,
+          "Anticipation": 0.07211538461538462,
+          "Balance": 0.1153846153846154,
+          "Strength": 0.08173076923076925,
+          "Finishing": 0.019230769230769235,
+          "Concentration": 0.0576923076923077,
+          "Dribbling": 0
+        },
+        "purity": {
+          "Acceleration": 0.2281879194630872,
+          "Pace": 0.15436241610738252,
+          "JumpingReach": 0.2348993288590603,
+          "Stamina": 0.09395973154362414,
+          "Anticipation": 0.09395973154362414,
+          "Balance": 0.05369127516778522,
+          "Strength": 0.04697986577181207,
+          "Finishing": 0,
+          "Concentration": 0.06711409395973153,
+          "Dribbling": 0.02684563758389261
+        }
+      },
+      "weights": {
+        "Acceleration": 0.21265165203923592,
+        "Pace": 0.15170043882292206,
+        "JumpingReach": 0.22321889519876092,
+        "Stamina": 0.09505678884873515,
+        "Anticipation": 0.08303755807950439,
+        "Balance": 0.08453794527620032,
+        "Strength": 0.06435531750129066,
+        "Finishing": 0.009615384615384618,
+        "Concentration": 0.06240320082601962,
+        "Dribbling": 0.013422818791946305
+      },
+      "requiredAttributes": [
+        "Acceleration",
+        "Pace",
+        "JumpingReach",
+        "Stamina",
+        "Anticipation",
+        "Balance",
+        "Strength",
+        "Finishing",
+        "Concentration",
+        "Dribbling"
+      ],
+      "missingSourceCoefficients": {
+        "mac": [
+          "Dribbling"
+        ],
+        "purity": []
+      }
+    }
+  },
+  "limitations": [
+    "Not independently outcome calibrated; no win probability or predicted points.",
+    "Compare within the same deployment family; cross-position scores are not equal performance contributions.",
+    "Positive reported point estimates retained, including small unconfirmed effects; no significance-based minimum weights.",
+    "Null source coefficients are unobserved, never replicated zero effects; player attributes with positive weight must all be valid.",
+    "CM/WM/SW are declared heuristics; FB/WB and central/wide AM transfers retain contextual uncertainty.",
+    "No fitted nonlinearities, role bonuses, synergy multipliers or developmental probabilities.",
+    "Intended FM27 engine context around 27.0.1; revalidate after match-engine patches."
+  ]
+}

@@ -157,12 +157,12 @@ It is a **hypothetical development index**, not a validated probability of attai
 the projected attributes or any match performance. Projected-source sensitivity would
 likewise not measure developmental uncertainty.
 
-Existing scalar `_meta` and `_metaPa` memoization stays in use. There is no additional
-details cache: details objects are temporary, not accumulated during sorting. The input
-attributes, positions and other football data are unchanged. As before, only the scalar
-memo fields are assigned. `loadDump` supplies fresh parsed player objects for each dump,
-so both scores and game-version context are renewed together. In-place edits of scored
-player objects are outside that existing cache contract.
+The GK coefficients and numerical formula remain unchanged after the outfield v2 update.
+Shared scalar memoization now lives in a `WeakMap`, without adding `_meta` or `_metaPa`
+fields to player objects. There is no additional details cache: details objects are
+temporary, not accumulated during sorting. `loadDump` supplies fresh parsed objects;
+version/context changes and replaced attributes also invalidate scalar entries.
+See the [current cache contract](fm27-outfield-meta-v2.md#integration-pa-and-caching).
 
 Sorting, filters, profile, comparison and PNG card models all consume the existing score
 functions. A one-declaration CSS fallback preserves comparison columns in older app

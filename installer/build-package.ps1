@@ -14,7 +14,7 @@ New-Item -ItemType Directory -Force -Path $pkg | Out-Null
 New-Item -ItemType Directory -Force -Path (Join-Path $pkg 'app') | Out-Null
 
 # App-bestanden (alleen wat de tool nodig heeft; geen testdata/servertooling voor devs)
-foreach ($f in @('server.js', 'index.html', 'app.js', 'nations.js', 'style.css', 'logo.svg')) {
+foreach ($f in @('server.js', 'index.html', 'app.js', 'nations.js', 'outfield-meta27.js', 'style.css', 'logo.svg')) {
   Copy-Item (Join-Path $repo "app\$f") -Destination (Join-Path $pkg 'app') -Force
 }
 

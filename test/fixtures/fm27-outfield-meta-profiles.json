@@ -1,0 +1,16 @@
+{
+  "kind": "SYNTHETIC_SOFTWARE_SCENARIOS_NOT_OUTCOME_VALIDATION",
+  "baselineAttribute": 12,
+  "profiles": [
+    { "name": "Fast striker, weak finishing", "position": "ST", "overrides": { "Acceleration": 19, "Pace": 20, "Finishing": 5, "JumpingReach": 13 } },
+    { "name": "Slower clinical striker", "position": "ST", "overrides": { "Acceleration": 14, "Pace": 14, "Finishing": 19, "Strength": 16, "Balance": 15, "Anticipation": 16 } },
+    { "name": "Aerial centre-back", "position": "DC", "overrides": { "JumpingReach": 20, "Heading": 19, "Strength": 17, "Pace": 9, "Acceleration": 10 } },
+    { "name": "Fast centre-back", "position": "DC", "overrides": { "Acceleration": 19, "Pace": 19, "JumpingReach": 11, "Concentration": 15 } },
+    { "name": "High-stamina full-back", "position": "DL", "overrides": { "Stamina": 20, "Pace": 16, "Acceleration": 16, "WorkRate": 19 } },
+    { "name": "Defensive holding midfielder", "position": "DM", "overrides": { "Acceleration": 16, "Concentration": 17, "Strength": 17, "Anticipation": 16, "Tackling": 18, "Marking": 17, "Pace": 10 } },
+    { "name": "Attacking number eight", "position": "MC", "overrides": { "Stamina": 17, "Acceleration": 15, "Pace": 14, "Strength": 15, "Finishing": 16, "Dribbling": 15, "Passing": 17 } },
+    { "name": "Dribbling winger", "position": "AML", "overrides": { "Dribbling": 20, "Pace": 17, "Acceleration": 18, "Balance": 17, "Stamina": 14 } },
+    { "name": "Technical slow number ten", "position": "AMC", "overrides": { "Pace": 7, "Acceleration": 8, "Technique": 20, "Passing": 20, "Vision": 20, "FirstTouch": 19, "Composure": 18, "Dribbling": 16, "Finishing": 16 } },
+    { "name": "Balanced profile", "position": "MC", "overrides": { "Acceleration": 14, "Pace": 14, "JumpingReach": 14, "Stamina": 14, "Anticipation": 14, "Balance": 14, "Strength": 14, "Finishing": 14, "Concentration": 14, "Dribbling": 14 } }
+  ]
+}
