@@ -1,4 +1,4 @@
-// FM27 Outfield Meta v2.0: pure, source-normalized goal-difference index, not an outcome forecast.
+// FM27 outfield scouting indices. The linear source profiles are shared across versions.
 (function (root, factory) {
   const api = factory();
   if (typeof module === 'object' && module.exports) module.exports = api;
@@ -102,24 +102,70 @@
     for (const position of POSITION_ORDER) if (positions.includes(position)) return position;
     return null;
   }
-  function evaluate(attrs, position) {
-    const mapping = Object.hasOwn(POSITION_MAP, position) ? POSITION_MAP[position] : null;
+  // Explicit research-family inputs use the same profiles as their FM deployment codes.
+  const deploymentForFamily = Object.freeze({ CB: 'DC', FB: 'DL', AM: 'AMC', CM: 'MC', WM: 'ML' });
+  const version = 'FM27_OUTFIELD_META_V2_1';
+  const defaultRho = 0.5;
+  const scenarios = freeze(Object.fromEntries([0, defaultRho, 1].map(jumpingReachRho =>
+    [jumpingReachRho, { jumpingReachRho, paceCorrection: false, accelerationCorrection: false }])));
+  const validAttribute = x => Number.isFinite(x) && x >= 1 && x <= 20;
+
+  // Study 12 team-xPts slopes determine the shape only. The endpoint scale is 1–20.
+  function jumpingReachUtility(x, rho = defaultRho) {
+    if (!validAttribute(x) || (rho !== 0 && rho !== defaultRho && rho !== 1)) return null;
+    if (rho === 0 || x === 1 || x === 20) return x;
+    const full = 1 + 19 * (0.019 * Math.min(x - 1, 8) + 0.047 * Math.max(0, x - 9))
+      / (0.019 * 8 + 0.047 * 11);
+    return (1 - rho) * x + rho * full;
+  }
+
+  function floorDiagnostics(attrs) {
+    const work = attrs?.WorkRate, stamina = attrs?.Stamina;
+    const clear = 'NO_LOW_FLOOR_WARNING', missing = 'UNKNOWN';
+    const workRateFloor = !validAttribute(work) ? missing : work <= 2 ? 'SEVERE_LOW_WORK_RATE'
+      : work < 7 ? 'LOW_WORK_RATE' : work < 9 ? 'BELOW_PLATEAU' : clear;
+    const staminaFloor = !validAttribute(stamina) ? missing : stamina <= 3 ? 'SEVERE_LOW_STAMINA'
+      : stamina < 7 ? 'LOW_STAMINA' : clear;
+    const floorWarnings = [workRateFloor, staminaFloor].filter(code => code !== clear && code !== missing);
+    const severeFloorCount = Number(workRateFloor === 'SEVERE_LOW_WORK_RATE') + Number(staminaFloor === 'SEVERE_LOW_STAMINA');
+    const floorStatus = severeFloorCount ? 'SEVERE' : floorWarnings.length ? 'WARNING'
+      : workRateFloor === missing || staminaFloor === missing ? 'INCOMPLETE' : 'OK';
+    return { workRateFloor, staminaFloor, floorWarnings, severeFloorCount, floorStatus };
+  }
+
+  function evaluateProfile(attrs, position, rho, output) {
+    const deployment = Object.hasOwn(deploymentForFamily, position) ? deploymentForFamily[position] : position;
+    const mapping = Object.hasOwn(POSITION_MAP, deployment) ? POSITION_MAP[deployment] : null;
     if (!mapping || !attrs) return null;
     const profile = profiles[mapping.group];
     const anchor = attrs[profile.requiredAttributes[0]];
     let mac = 0, purity = 0;
     for (const k of profile.requiredAttributes) {
       const v = attrs[k];
-      if (!Number.isFinite(v) || v < 1 || v > 20) return null;
+      if (!validAttribute(v)) return null;
       mac += profile.sources.mac[k] * (v - anchor);
       purity += profile.sources.purity[k] * (v - anchor);
     }
-    const macScore = anchor + mac, purityScore = anchor + purity;
-    return { score: (macScore + purityScore) / 2, macScore, purityScore,
-      sourceMin: Math.min(macScore, purityScore), sourceMax: Math.max(macScore, purityScore),
-      sourceSpread: Math.abs(macScore - purityScore), position, positionGroup: mapping.group,
-      evidenceStatus: mapping.evidence, modelVersion: VERSION,
-      missingSourceCoefficients: profile.missingSourceCoefficients };
+    const linearMac = anchor + mac, linearPurity = anchor + purity;
+    const linearScore = (linearMac + linearPurity) / 2;
+    const utility = jumpingReachUtility(attrs.JumpingReach, rho);
+    if (utility === null) return null;
+    const adjustment = utility - attrs.JumpingReach;
+    const sourceMac = linearMac + adjustment * profile.sources.mac.JumpingReach;
+    const sourcePurity = linearPurity + adjustment * profile.sources.purity.JumpingReach;
+    const nonlinearScore = (sourceMac + sourcePurity) / 2;
+    if (output === 'scalar') return nonlinearScore;
+    const details = { position, positionGroup: mapping.group, score: nonlinearScore,
+      macScore: sourceMac, purityScore: sourcePurity,
+      sourceMin: Math.min(sourceMac, sourcePurity), sourceMax: Math.max(sourceMac, sourcePurity),
+      sourceSpread: Math.abs(sourceMac - sourcePurity), missingSourceCoefficients: profile.missingSourceCoefficients };
+    if (output === 'baseline') return { ...details, modelVersion: VERSION, evidenceStatus: mapping.evidence };
+    return { ...details, version, modelVersion: version, positionEvidence: mapping.evidence,
+      evidenceStatus: 'EXPLORATORY_NOT_OUTCOME_VALIDATED', linearScore, nonlinearScore, sourceMac, sourcePurity,
+      nonlinearity: scenarios[rho], ...floorDiagnostics(attrs) };
   }
-  return freeze({ model, evaluate, defaultPosition, normalizeSource });
+  const score = (attrs, position) => evaluateProfile(attrs, position, defaultRho, 'scalar');
+  const evaluate = (attrs, position, rho = defaultRho) => evaluateProfile(attrs, position, rho, 'details');
+  const evaluateLinear = (attrs, position) => evaluateProfile(attrs, position, 0, 'baseline');
+  return freeze({ model, version, score, evaluate, evaluateLinear, jumpingReachUtility, floorDiagnostics, defaultPosition, normalizeSource });
 });

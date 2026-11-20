@@ -427,7 +427,7 @@ test('GK v2: synthetic scenario report is reproducible and explicitly not outcom
   assert.equal(report.tradeoff.stability,'SOURCE_SENSITIVE');
   assert.equal(report.rows.find(r=>r.name==='Agility specialist').rankGain,3);
   const fs=require('node:fs'),path=require('node:path');
-  assert.equal(markdown(report),fs.readFileSync(path.join(__dirname,'../docs/fm27-goalkeeper-meta-v2-scenarios.md'),'utf8'));
+  assert.equal(markdown(report),fs.readFileSync(path.join(__dirname,'../docs/fm27-goalkeeper-meta-v2-scenarios.md'),'utf8').replace(/\r\n/g,'\n'));
 });
 
 // ---------- FM27 Outfield Meta v2.0 ----------
@@ -453,7 +453,7 @@ for(const [group,position] of Object.entries(OF_POS)) {
  test(`Outfield v2 ${group}: exact uniform inputs and normalized source/ensemble weights`,()=>{
   const app=fm27(),profile=app.FMSSOutfieldMeta27.model.profiles[group];
   for(const value of [1,12,20]){
-   const d=app.outfieldMetaForPosition(outPlayer(position,outAttrs(value)),position);
+   const d=app.FMSSOutfieldMeta27.evaluateLinear(outAttrs(value),position);
    assert.equal(d.score,value);assert.equal(d.macScore,value);assert.equal(d.purityScore,value);assert.equal(d.sourceSpread,0);
   }
   for(const weights of [profile.sources.mac,profile.sources.purity,profile.weights])near(Object.values(weights).reduce((a,b)=>a+b,0),1);
@@ -465,13 +465,13 @@ for(const [group,position] of Object.entries(OF_POS)) {
   const samples=[outAttrs(1),outAttrs(20),outAttrs(12,{JumpingReach:20,Pace:6,Acceleration:8})];
   for(let i=0;i<100;i++)samples.push(Object.fromEntries(OF_KEYS.map(k=>[k,1+19*next()])));
   for(const attrs of samples){
-   const p=outPlayer(position,attrs),d=app.outfieldMetaForPosition(p,position);
+   const d=app.FMSSOutfieldMeta27.evaluateLinear(attrs,position);
    near(d.macScore,handSource(group,'mac',attrs));near(d.purityScore,handSource(group,'purity',attrs));
    near(d.score,(handSource(group,'mac',attrs)+handSource(group,'purity',attrs))/2);
    assert.ok(d.score>=1&&d.score<=20);assert.ok(d.sourceMin>=1&&d.sourceMax<=20);
    assert.equal(d.sourceMin,Math.min(d.macScore,d.purityScore));assert.equal(d.sourceMax,Math.max(d.macScore,d.purityScore));
    assert.equal(d.sourceSpread,Math.abs(d.macScore-d.purityScore));
-   for(const k of OF_KEYS)if(attrs[k]<20){const up=app.outfieldMetaForPosition(outPlayer(position,{...attrs,[k]:Math.min(20,attrs[k]+1)}),position);assert.ok(up.score>d.score,k);}
+   for(const k of OF_KEYS)if(attrs[k]<20){const up=app.FMSSOutfieldMeta27.evaluateLinear({...attrs,[k]:Math.min(20,attrs[k]+1)},position);assert.ok(up.score>d.score,k);}
   }
  });
  test(`Outfield v2 ${group}: every required missing or invalid player attribute returns null`,()=>{
@@ -518,7 +518,7 @@ test('Outfield v2: ST Finishing uses positive GD effects from BOTH sources, with
  const pace=app.outfieldMetaForPosition(outPlayer('ST',outAttrs(12,{Pace:13})),'ST');
  near(pace.score-base.score,(45/222+90/415)/2);assert.ok(pace.score>base.score);
  const fraction=app.outfieldMetaForPosition(outPlayer('ST',outAttrs(12,{Finishing:12.01})),'ST');
- assert.ok(fraction.score>12&&fraction.score<12.01);assert.notEqual(fraction.score,Number(fraction.score.toFixed(1)));
+ assert.ok(fraction.score>base.score&&fraction.score<base.score+.01);assert.notEqual(fraction.score,Number(fraction.score.toFixed(1)));
 });
 
 test('Outfield v2: asymmetric position differences, proxies and all FM position mappings',()=>{
@@ -528,9 +528,9 @@ test('Outfield v2: asymmetric position differences, proxies and all FM position 
  const scores=Object.keys(OF_GOLD).map(group=>app.outfieldMetaForPosition(outPlayer(OF_POS[group],attrs),OF_POS[group]).score);
  assert.equal(new Set(scores).size,5);
  for(const [position,mapping] of Object.entries(app.FMSSOutfieldMeta27.model.positions)){
-  const d=app.outfieldMetaForPosition(outPlayer(position,attrs),position);assert.equal(d.positionGroup,mapping.group);assert.equal(d.evidenceStatus,mapping.evidence);
+  const d=app.outfieldMetaForPosition(outPlayer(position,attrs),position);assert.equal(d.positionGroup,mapping.group);assert.equal(d.positionEvidence,mapping.evidence);
  }
- assert.equal(app.outfieldMetaForPosition(outPlayer('AMC'),'AMC').evidenceStatus,'TRANSFER_CENTRAL_AM');
+ assert.equal(app.outfieldMetaForPosition(outPlayer('AMC'),'AMC').positionEvidence,'TRANSFER_CENTRAL_AM');
  for(const source of ['mac','purity'])for(const k of OF_KEYS){
   const p=app.FMSSOutfieldMeta27.model.profiles;
   near(p.CM_PROXY.sources[source][k],.6*p.DM.sources[source][k]+.4*p.AM.sources[source][k]);
@@ -576,12 +576,12 @@ test('Outfield v2: version changes, new objects and replaced attribute data inva
   near(app.metaScore(p),legacy);assert.notEqual(app.metaScore(p),v2);
  }
  app.state.meta.game='FM27';near(app.metaScore(p),v2);near(app.metaPaScore(p),v2pa);
- const replacement=outPlayer('ST',outAttrs(18),{id:p.id});assert.equal(app.metaScore(replacement),18);
- p.attrs=outAttrs(16);assert.equal(app.metaScore(p),16);
- app.state.meta={game:'FM27'};assert.equal(app.metaScore(p),16);
+ const replacement=outPlayer('ST',outAttrs(18),{id:p.id});assert.equal(app.metaScore(replacement),app.outfieldMetaForPosition(replacement,'ST').score);
+ p.attrs=outAttrs(16);assert.equal(app.metaScore(p),app.outfieldMetaForPosition(p,'ST').score);
+ app.state.meta={game:'FM27'};assert.equal(app.metaScore(p),app.outfieldMetaForPosition(p,'ST').score);
  p.pos='DC';p.posArr=['DC'];near(app.metaScore(p),app.outfieldMetaForPosition(p,'DC').score);
  // Supplied memo fields on an imported/cloned object are never trusted.
- assert.equal(app.metaScore(outPlayer('ST',outAttrs(10),{_meta:20,_metaPa:20})),10);
+ assert.equal(app.metaScore(outPlayer('ST',outAttrs(10),{_meta:20,_metaPa:20})),app.FMSSOutfieldMeta27.evaluate(outAttrs(10),'ST').score);
 });
 
 test('Outfield v2: frozen players are unchanged; PA uses unchanged projection and source model',()=>{
@@ -616,7 +616,7 @@ test('Outfield v2: table, filters, profile, comparison, card and translations us
  app.showDetail(a);assert.ok(rendered['detail-body'].includes('FM27 Meta'));assert.match(rendered['detail-body'],/ST/);assert.match(rendered['detail-body'],/AMC/);
  app.state.compare=[2,3];app.openCompare();assert.match(rendered['compare-inner'],/data-tip=/);assert.ok(rendered['compare-inner'].includes('>'+score+'</span>'));
  for(const lang of ['en','de','fr','nl']){
-  app.state.lang=lang;assert.match(app.outfieldMetaTip(a),/FM27 Outfield Meta v2\.0/);assert.match(app.outfieldMetaTip(a),/50\/50/);
+  app.state.lang=lang;assert.match(app.outfieldMetaTip(a),/FM27 Outfield Meta v2\.1/);assert.match(app.outfieldMetaTip(a),/50\/50/);
   assert.ok(!app.outfieldMetaTip(a).includes('{position}'));assert.match(app.outfieldMetaTip(a,true),/PA/);
  }
 });
@@ -632,8 +632,8 @@ test('Outfield v2: repeated scalar sort lookups do not read attributes or grow p
  const app=fm27();let reads=0;
  const attrs=new Proxy(outAttrs(),{get(target,key){reads++;return target[key];}});
  const p=outPlayer('ST',attrs),fields=Object.keys(p);
- app.metaScore(p);const currentReads=reads;
- for(let i=0;i<1000;i++)assert.equal(app.metaScore(p),12);
+ const current=app.metaScore(p),currentReads=reads;
+ for(let i=0;i<1000;i++)assert.equal(app.metaScore(p),current);
  assert.equal(reads,currentReads);app.metaPaScore(p);const paReads=reads;
  for(let i=0;i<1000;i++)app.metaPaScore(p);
  assert.equal(reads,paReads);assert.deepEqual(Object.keys(p),fields);
@@ -650,5 +650,5 @@ test('Outfield v2: ten-profile scenario report is deterministic and ranks within
   assert.ok(rows.some(r=>r.rankGain!==0));
  }
  const fs=require('node:fs'),path=require('node:path');
- assert.equal(markdown(report),fs.readFileSync(path.join(__dirname,'../docs/fm27-outfield-meta-v2-scenarios.md'),'utf8'));
+ assert.equal(markdown(report),fs.readFileSync(path.join(__dirname,'../docs/fm27-outfield-meta-v2-scenarios.md'),'utf8').replace(/\r\n/g,'\n'));
 });

@@ -23,17 +23,17 @@ function scenarioReport() {
   app.state.meta = { game: 'FM26' };
   const legacy = players.map(p => app.metaScore(p));
   app.state.meta = { game: 'FM27' };
-  const ownPosition = players.map((p, i) => ({ name: p.name, legacy: legacy[i], ...app.outfieldMetaForPosition(p, p.pos) }));
+  const ownPosition = players.map((p, i) => ({ name: p.name, legacy: legacy[i], ...app.FMSSOutfieldMeta27.evaluateLinear(p.attrs, p.pos) }));
   const byDeployment = {};
   for (const position of DEPLOYMENTS) {
-    const rows = players.map((p, i) => ({ id: p.id, name: p.name, legacy: legacy[i], ...app.outfieldMetaForPosition(p, position) }));
+    const rows = players.map((p, i) => ({ id: p.id, name: p.name, legacy: legacy[i], ...app.FMSSOutfieldMeta27.evaluateLinear(p.attrs, position) }));
     rank(rows, 'legacy', 'legacyRank'); rank(rows, 'score', 'newRank');
     rows.sort((a, b) => a.newRank - b.newRank);
     rows.forEach((row, i) => {
       row.rankGain = row.legacyRank - row.newRank;
       const next = rows[i + 1];
       row.comparedWith = next?.name ?? null;
-      row.sourceComparison = next ? app.compareOutfieldMeta(players[row.id - 1], players[next.id - 1], position) : null;
+      row.sourceComparison = next ? app.compareOutfieldMeta(players[row.id - 1], players[next.id - 1], position, 0) : null;
     });
     byDeployment[position] = rows;
   }

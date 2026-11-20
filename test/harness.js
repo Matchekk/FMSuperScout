@@ -55,7 +55,7 @@ function loadApp(options = {}) {
     'rolesForPos', 'physGrowthFactor', 'mentalGrowthFactor', 'state', 'ROLE_BY_ID', 'ROLES',
     'I18N', 'ATTR_LABEL', 'ROLE_LABEL', 'CARDL', 'metaScore', 'metaPaScore',
     'NATIONS', 'JOB_LABEL', 'natsLabel', 'jobLabel', 'fmtWage', 'wageFactor',
-    'histKey', 'STAFF_ATTR_LABEL', 'STAFF_ATTR_GROUPS', 'natPos', 'myTeamType', 'inMyTeam', 'dealInvolvesMe',
+    'caGrowth', 'postHistorySnapshot', 'histKey', 'STAFF_ATTR_LABEL', 'STAFF_ATTR_GROUPS', 'natPos', 'myTeamType', 'inMyTeam', 'dealInvolvesMe',
     'gkMeta27Details', 'compareGkMeta', 'MAC_GK_BETA', 'PURITY_GK_BETA', 'GK_META27_W',
     'META_W', 'META_GK_W', 'weightedMeta', 'metaHtml', 'metaPaHtml', 'PLAYER_COLS',
     'applyFilters', 'sortRows', 'showDetail', 'openCompare', 'buildCardModel', 'loadDump', 'parseDumpStream',
@@ -70,7 +70,7 @@ function loadApp(options = {}) {
   return factory(
     documentStub, windowStub, localStorageStub, navigatorStub, options.fetch || fetchStub,
     options.setTimeout || noopTimer, noopTimer, () => {}, () => {}, console,
-    require(path.join(path.dirname(options.sourcePath || path.join(__dirname, '..', 'app', 'app.js')), 'outfield-meta27.js')),
+    options.outfieldModel || require(path.join(path.dirname(options.sourcePath || path.join(__dirname, '..', 'app', 'app.js')), 'outfield-meta27.js')),
   );
 }
 

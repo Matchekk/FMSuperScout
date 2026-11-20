@@ -49,10 +49,12 @@ save over time, and that unlocks two things no tool without memory can do:
 
 **A meta index informed by match-engine experiments.** Scores use the 1-20 attribute scale.
 Explicitly identified FM27 outfield players use
-**[Outfield Meta v2.0](docs/fm27-outfield-meta-v2.md)**: separately normalized
+**[Outfield Meta v2.1](docs/fm27-meta-score-v2-1.md)**. It uses separately normalized
 Fm-Match-Lab 13b and Purity goal-difference effects, averaged 50/50 for the player's
-natural default position. CM/WM are declared proxies; FB/WB and central/wide AM carry
-context-transfer limits. Natural multiposition profiles show separate deployment scores.
+natural default position. Jumping Reach gets half the segmented correction from Study 12.
+The tooltip compares the working index with linear v2.0. Low Work Rate and Stamina
+are flagged beside the score. Independent player-outcome validation is pending.
+CM/WM are proxies. FB/WB and central/wide AM involve context transfer. Natural multiposition profiles show separate deployment scores.
 Compare primarily within the same deployment position, not as equal contributions across
 positions. FM26 and unknown versions retain the
 [legacy global field-player weighting](https://fm-arena.com/table/26-player-attributes-testing).
@@ -65,7 +67,7 @@ The index is not calibrated against independent goalkeeper match outcomes.
 **PA meta** applies the same weighting to the existing position-group attribute projection:
 a hypothetical development index, not a validated probability of reaching those attributes.
 See the reproducible synthetic comparisons for
-[outfield players](docs/fm27-outfield-meta-v2-scenarios.md) and
+[outfield players](docs/fm27-meta-score-v2-1.md#kontrollierte-synthetische-profile) and
 [goalkeepers](docs/fm27-goalkeeper-meta-v2-scenarios.md).
 
 **Shareable player cards.** One click saves a PNG in FM's own visual language: scout stars for

@@ -182,10 +182,15 @@ const I18N = {
     wagePer: 'Salaris per', perWeek: 'week', perMonth: 'maand', perYear: 'jaar',
     perWeekSuf: 'p/w', perMonthSuf: 'p/mnd', perYearSuf: 'p/jr', jobStaff: 'Staflid',
     c_meta: 'Meta', metaLabel: 'Meta-score', c_metapa: 'PA-meta',
-    metaHint: "Attribuutindex (1–20). FM27-veldspelers: positiegebonden Outfield Meta v2.0; vooral vergelijken voor dezelfde inzetpositie. FM27-keepers: apart GK Meta v2.0. FM26 en onbekende spelversies: bestaande legacy-weging. Geen gekalibreerde prestatievoorspelling.",
-    outfieldMeta27Hint: "FM27 Outfield Meta v2.0 (1–20). Afzonderlijk genormaliseerde TORDIFFERENTIE-effecten uit Fm-Match-Lab 13b en Purity, daarna 50/50 gemiddeld. Dribbelen steunt alleen op Purity; het passende Mac-GD-coëfficiënt ontbreekt. Alle positief gewogen attributen zijn vereist.\n\nDe bronnenrange is geen betrouwbaarheidsinterval of winstkans. CM/WM/SW zijn heuristische proxies; FB/WB en centrale/brede AM vereisen contextoverdracht. Vergelijk vooral binnen dezelfde inzetpositie; gelijke scores over verschillende posities betekenen geen gelijke wedstrijdbijdrage.",
-    outfieldMeta27PaHint: "FM27 Outfield Meta v2.0 — PA. Dezelfde positiegewichten op de bestaande PA-projectie; hypothetische ontwikkelingsindex, geen gevalideerde kans op deze attributen. Zonder restpotentieel gelijk aan Meta. Geen nieuwe groeifactor. De bronnenrange is geen betrouwbaarheidsinterval. Dribbelen steunt alleen op Purity, niet op een Mac-GD-meting.",
-    outfieldMeta27Summary: "{position} · {group} · {evidence}\nMac {mac} · Purity {purity}\nBronnenrange {min}–{max} · verschil {spread}",
+    metaHint: "Attribuutindex (1–20). FM27-veldspelers: positiegebonden Outfield Meta v2.1; vooral vergelijken voor dezelfde inzetpositie. FM27-keepers: apart GK Meta v2.0. FM26 en onbekende spelversies: bestaande legacy-weging. Geen gekalibreerde prestatievoorspelling.",
+    outfieldMeta27Hint: "FM27 Outfield Meta v2.1 (1–20). Sprongkracht volgt een geknikte curve (ρ = 0,5). Onafhankelijke wedstrijdresultaten per speler moeten deze correctie nog bevestigen. Afzonderlijk genormaliseerde TORDIFFERENTIE-effecten uit Fm-Match-Lab 13b en Purity, daarna 50/50 gemiddeld. Dribbelen steunt alleen op Purity; het passende Mac-GD-coëfficiënt ontbreekt. Alle positief gewogen attributen zijn vereist.\n\nDe bronnenrange is geen betrouwbaarheidsinterval of winstkans. CM/WM/SW zijn heuristische proxies; FB/WB en centrale/brede AM vereisen contextoverdracht. Vergelijk vooral binnen dezelfde inzetpositie; gelijke scores over verschillende posities betekenen geen gelijke wedstrijdbijdrage.",
+    outfieldMeta27PaHint: "FM27 Outfield Meta v2.1 — PA. Hypothetische PA-projectie met dezelfde sprongkrachtcurve. De kans om dit potentieel te bereiken is onbekend. Sprongkracht volgt een geknikte curve (ρ = 0,5). Onafhankelijke wedstrijdresultaten per speler moeten deze correctie nog bevestigen.",
+    outfieldMeta27Summary: "{position} · {group} · {evidence}\nLineair v2.0 {linear} · v2.1 {current}\nMac {mac} · Purity {purity}\nBronnenrange {min}–{max} · verschil {spread}",
+    floorObserved: "Huidige attributen",
+    floorSevere: "zeer laag",
+    floorLow: "laag",
+    floorBelow: "onder plateau",
+    floorUnknown: "onbekend",
     outfieldMeta27Positions: "FM27 Meta per inzetpositie",
     outfieldMeta27Default: "standaard",
     outfieldMeta27Direct: "onderzochte positiefamilie",
@@ -333,10 +338,15 @@ const I18N = {
     wagePer: 'Wage per', perWeek: 'week', perMonth: 'month', perYear: 'year',
     perWeekSuf: '/wk', perMonthSuf: '/mo', perYearSuf: '/yr', jobStaff: 'Staff member',
     c_meta: 'Meta', metaLabel: 'Meta score', c_metapa: 'PA meta',
-    metaHint: "Attribute index (1–20). FM27 outfield players: position-specific Outfield Meta v2.0, primarily for the same deployment position. FM27 goalkeepers: separate GK Meta v2.0. FM26 and unknown game versions: existing legacy weighting. Not a calibrated performance forecast.",
-    outfieldMeta27Hint: "FM27 Outfield Meta v2.0 (1–20). Separately normalized GOAL-DIFFERENCE effects from Fm-Match-Lab 13b and Purity, then averaged 50/50. Dribbling is supported only by Purity; the matching Mac GD coefficient is missing. All positively weighted attributes are required.\n\nThe source range is not a confidence interval or win probability. CM/WM/SW are heuristic proxies; FB/WB and central/wide AM require context transfer. Compare primarily within the same deployment position: equal scores across positions do not imply equal match contributions.",
-    outfieldMeta27PaHint: "FM27 Outfield Meta v2.0 — PA. The same position weights on the existing PA projection: a hypothetical development index, not a validated probability of reaching those attributes. With no remaining potential, equals Meta. No new growth factor. The source range is not a confidence interval. Dribbling is supported only by Purity, not a Mac GD observation.",
-    outfieldMeta27Summary: "{position} · {group} · {evidence}\nMac {mac} · Purity {purity}\nSource range {min}–{max} · spread {spread}",
+    metaHint: "Attribute index (1–20). FM27 outfield players: position-specific Outfield Meta v2.1, primarily for the same deployment position. FM27 goalkeepers: separate GK Meta v2.0. FM26 and unknown game versions: existing legacy weighting. Not a calibrated performance forecast.",
+    outfieldMeta27Hint: "FM27 Outfield Meta v2.1 (1–20). Jumping Reach uses a segmented curve (ρ = 0.5). Independent player match outcomes have yet to validate this adjustment. Separately normalized GOAL-DIFFERENCE effects from Fm-Match-Lab 13b and Purity, then averaged 50/50. Dribbling is supported only by Purity; the matching Mac GD coefficient is missing. All positively weighted attributes are required.\n\nThe source range is not a confidence interval or win probability. CM/WM/SW are heuristic proxies; FB/WB and central/wide AM require context transfer. Compare primarily within the same deployment position: equal scores across positions do not imply equal match contributions.",
+    outfieldMeta27PaHint: "FM27 Outfield Meta v2.1 — PA. Hypothetical PA projection using the same Jumping Reach curve. The chance of reaching this potential is unknown. Jumping Reach uses a segmented curve (ρ = 0.5). Independent player match outcomes have yet to validate this adjustment.",
+    outfieldMeta27Summary: "{position} · {group} · {evidence}\nLinear v2.0 {linear} · v2.1 {current}\nMac {mac} · Purity {purity}\nSource range {min}–{max} · spread {spread}",
+    floorObserved: "Current attributes",
+    floorSevere: "very low",
+    floorLow: "low",
+    floorBelow: "below plateau",
+    floorUnknown: "unknown",
     outfieldMeta27Positions: "FM27 Meta by deployment position",
     outfieldMeta27Default: "default",
     outfieldMeta27Direct: "studied position family",
@@ -484,10 +494,15 @@ const I18N = {
     wagePer: 'Salaire par', perWeek: 'semaine', perMonth: 'mois', perYear: 'an',
     perWeekSuf: '/sem', perMonthSuf: '/mois', perYearSuf: '/an', jobStaff: 'Membre du staff',
     c_meta: 'Méta', metaLabel: 'Score méta', c_metapa: 'Méta PA',
-    metaHint: "Indice des attributs (1–20). Joueurs de champ FM27 : Outfield Meta v2.0 par poste, à comparer surtout pour le même poste. Gardiens FM27 : GK Meta v2.0 distinct. FM26 et versions inconnues : pondération historique conservée. Pas une prévision calibrée des performances.",
-    outfieldMeta27Hint: "FM27 Outfield Meta v2.0 (1–20). Effets sur la DIFFÉRENCE DE BUTS de Fm-Match-Lab 13b et Purity, normalisés séparément puis moyennés à 50/50. Dribbles repose uniquement sur Purity ; le coefficient GD correspondant manque chez Mac. Tous les attributs de poids positif sont requis.\n\nL’étendue entre sources n’est ni un intervalle de confiance ni une probabilité de victoire. CM/WM/SW sont des proxys heuristiques ; FB/WB et AM axial/large nécessitent un transfert de contexte. Comparer surtout au même poste : un score égal entre postes ne signifie pas une contribution égale en match.",
-    outfieldMeta27PaHint: "FM27 Outfield Meta v2.0 — PA. Les mêmes poids par poste sur la projection PA existante : indice de développement hypothétique, pas une probabilité validée d’atteindre ces attributs. Sans potentiel restant, égal au Méta. Aucun nouveau facteur de croissance. L’étendue entre sources n’est pas un intervalle de confiance. Dribbles repose uniquement sur Purity, pas sur une mesure GD de Mac.",
-    outfieldMeta27Summary: "{position} · {group} · {evidence}\nMac {mac} · Purity {purity}\nÉtendue des sources {min}–{max} · écart {spread}",
+    metaHint: "Indice des attributs (1–20). Joueurs de champ FM27 : Outfield Meta v2.1 par poste, à comparer surtout pour le même poste. Gardiens FM27 : GK Meta v2.0 distinct. FM26 et versions inconnues : pondération historique conservée. Pas une prévision calibrée des performances.",
+    outfieldMeta27Hint: "FM27 Outfield Meta v2.1 (1–20). La détente suit une courbe par segments (ρ = 0,5). La correction reste à valider sur des résultats de match individuels indépendants. Effets sur la DIFFÉRENCE DE BUTS de Fm-Match-Lab 13b et Purity, normalisés séparément puis moyennés à 50/50. Dribbles repose uniquement sur Purity ; le coefficient GD correspondant manque chez Mac. Tous les attributs de poids positif sont requis.\n\nL’étendue entre sources n’est ni un intervalle de confiance ni une probabilité de victoire. CM/WM/SW sont des proxys heuristiques ; FB/WB et AM axial/large nécessitent un transfert de contexte. Comparer surtout au même poste : un score égal entre postes ne signifie pas une contribution égale en match.",
+    outfieldMeta27PaHint: "FM27 Outfield Meta v2.1 — PA. Projection PA hypothétique avec la même courbe de détente. La probabilité d’atteindre ce potentiel reste inconnue. La détente suit une courbe par segments (ρ = 0,5). La correction reste à valider sur des résultats de match individuels indépendants.",
+    outfieldMeta27Summary: "{position} · {group} · {evidence}\nLinéaire v2.0 {linear} · v2.1 {current}\nMac {mac} · Purity {purity}\nÉtendue des sources {min}–{max} · écart {spread}",
+    floorObserved: "Attributs actuels",
+    floorSevere: "très faible",
+    floorLow: "faible",
+    floorBelow: "sous le plateau",
+    floorUnknown: "inconnu",
     outfieldMeta27Positions: "FM27 Méta par poste",
     outfieldMeta27Default: "par défaut",
     outfieldMeta27Direct: "famille de postes étudiée",
@@ -635,10 +650,15 @@ const I18N = {
     wagePer: 'Gehalt pro', perWeek: 'Woche', perMonth: 'Monat', perYear: 'Jahr',
     perWeekSuf: '/Wo', perMonthSuf: '/Mon.', perYearSuf: '/Jahr', jobStaff: 'Mitarbeiter',
     c_meta: 'Meta', metaLabel: 'Meta-Score', c_metapa: 'PA-Meta',
-    metaHint: "Attributindex (1–20). FM27-Feldspieler: positionsabhängige Outfield Meta v2.0, vor allem für dieselbe Einsatzposition vergleichen. FM27-Torhüter: separate GK Meta v2.0. FM26 und unbekannte Spielversionen: bestehende Legacy-Gewichtung. Keine kalibrierte Leistungsprognose.",
-    outfieldMeta27Hint: "FM27 Outfield Meta v2.0 (1–20). Getrennt normalisierte TORDIFFERENZ-Effekte aus Fm-Match-Lab 13b und Purity, danach 50/50 gemittelt. Dribbling wird nur durch Purity gestützt; der passende Mac-GD-Koeffizient fehlt. Alle positiv gewichteten Attribute sind erforderlich.\n\nDer Quellenbereich ist kein Konfidenzintervall und keine Gewinnwahrscheinlichkeit. CM/WM/SW sind heuristische Proxys; FB/WB und zentrale/breite AM erfordern eine Kontextübertragung. Vor allem innerhalb derselben Einsatzposition vergleichen: Gleiche Scores verschiedener Positionen bedeuten keine gleiche Matchwirkung.",
-    outfieldMeta27PaHint: "FM27 Outfield Meta v2.0 — PA. Dieselben Positionsgewichte auf der bisherigen PA-Projektion: hypothetischer Entwicklungsindex, keine validierte Wahrscheinlichkeit für das Erreichen dieser Attribute. Ohne Restpotenzial gleich Meta. Kein neuer Wachstumsfaktor. Der Quellenbereich ist kein Konfidenzintervall. Dribbling wird nur durch Purity gestützt, nicht durch einen Mac-GD-Messwert.",
-    outfieldMeta27Summary: "{position} · {group} · {evidence}\nMac {mac} · Purity {purity}\nQuellenbereich {min}–{max} · Abstand {spread}",
+    metaHint: "Attributindex (1–20). FM27-Feldspieler: positionsabhängige Outfield Meta v2.1, vor allem für dieselbe Einsatzposition vergleichen. FM27-Torhüter: separate GK Meta v2.0. FM26 und unbekannte Spielversionen: bestehende Legacy-Gewichtung. Keine kalibrierte Leistungsprognose.",
+    outfieldMeta27Hint: "FM27 Outfield Meta v2.1 (1–20). Sprunghöhe folgt einer geknickten Nutzenkurve (ρ = 0,5). Die Validierung an unabhängigen Spieler-Matchergebnissen steht aus. Getrennt normalisierte TORDIFFERENZ-Effekte aus Fm-Match-Lab 13b und Purity, danach 50/50 gemittelt. Dribbling wird nur durch Purity gestützt; der passende Mac-GD-Koeffizient fehlt. Alle positiv gewichteten Attribute sind erforderlich.\n\nDer Quellenbereich ist kein Konfidenzintervall und keine Gewinnwahrscheinlichkeit. CM/WM/SW sind heuristische Proxys; FB/WB und zentrale/breite AM erfordern eine Kontextübertragung. Vor allem innerhalb derselben Einsatzposition vergleichen: Gleiche Scores verschiedener Positionen bedeuten keine gleiche Matchwirkung.",
+    outfieldMeta27PaHint: "FM27 Outfield Meta v2.1 — PA. Hypothetische PA-Projektion mit derselben Sprunghöhenkurve. Die Wahrscheinlichkeit, dieses Potenzial zu erreichen, ist unbekannt. Sprunghöhe folgt einer geknickten Nutzenkurve (ρ = 0,5). Die Validierung an unabhängigen Spieler-Matchergebnissen steht aus.",
+    outfieldMeta27Summary: "{position} · {group} · {evidence}\nLinear v2.0 {linear} · v2.1 {current}\nMac {mac} · Purity {purity}\nQuellenbereich {min}–{max} · Abstand {spread}",
+    floorObserved: "Aktuelle Attribute",
+    floorSevere: "sehr niedrig",
+    floorLow: "niedrig",
+    floorBelow: "unter Plateau",
+    floorUnknown: "unbekannt",
     outfieldMeta27Positions: "FM27 Meta nach Einsatzposition",
     outfieldMeta27Default: "Standard",
     outfieldMeta27Direct: "untersuchte Positionsfamilie",
@@ -1782,7 +1802,7 @@ function compareGkMeta(playerA, playerB) {
 }
 function weightedMeta(p, attrs) {
   if (isFm27Gk(p)) return gkMeta27Details(attrs)?.score ?? null;
-  if (state.meta.game === 'FM27') return outfieldMetaForPosition(p, FMSSOutfieldMeta27.defaultPosition(p), attrs)?.score ?? null;
+  if (state.meta.game === 'FM27') return FMSSOutfieldMeta27.score(attrs, FMSSOutfieldMeta27.defaultPosition(p));
   const W = natPos(p).includes('GK') ? META_GK_W : META_W;
   let sum = 0, w = 0;
   for (const k in W) {
@@ -1793,27 +1813,27 @@ function weightedMeta(p, attrs) {
 }
 // Pure position evaluator. Explicit deployment can differ from a player's natural positions;
 // it estimates the attribute index only, never a familiarity bonus. GK profiles stay separate.
-function outfieldMetaForPosition(p, position, attrs = p?.attrs) {
+function outfieldMetaForPosition(p, position, attrs = p?.attrs, rho) {
   if (!p || natPos(p).includes('GK')) return null;
-  return FMSSOutfieldMeta27.evaluate(attrs, position);
+  return FMSSOutfieldMeta27.evaluate(attrs, position, rho);
 }
-function compareOutfieldMeta(playerA, playerB, position) {
-  const a = outfieldMetaForPosition(playerA, position || FMSSOutfieldMeta27.defaultPosition(playerA));
-  const b = outfieldMetaForPosition(playerB, position || FMSSOutfieldMeta27.defaultPosition(playerB));
+function compareOutfieldMeta(playerA, playerB, position, rho) {
+  const a = outfieldMetaForPosition(playerA, position || FMSSOutfieldMeta27.defaultPosition(playerA), playerA?.attrs, rho);
+  const b = outfieldMetaForPosition(playerB, position || FMSSOutfieldMeta27.defaultPosition(playerB), playerB?.attrs, rho);
   if (!a || !b || a.positionGroup !== b.positionGroup) return null;
   const macDelta = a.macScore - b.macScore, purityDelta = a.purityScore - b.purityScore;
   const sourceStable = (macDelta > 0 && purityDelta > 0) || (macDelta < 0 && purityDelta < 0);
   return { scoreDelta: a.score - b.score, macDelta, purityDelta, sourceStable,
-    stability: a.evidenceStatus === 'PROXY_MODEL' || b.evidenceStatus === 'PROXY_MODEL'
+    stability: a.positionEvidence === 'PROXY_MODEL' || b.positionEvidence === 'PROXY_MODEL'
       ? 'PROXY_MODEL' : sourceStable ? 'SOURCE_STABLE' : 'SOURCE_SENSITIVE' };
 }
 // Scalar memoization follows parsed player lifetimes without adding fields to the players.
 // A context/version/date switch discards the WeakMap, including when objects are reused.
-let metaMemos = new WeakMap(), metaMemoContext, metaMemoGame, metaMemoDate, metaMemoYear, metaMemoDoy;
+let metaMemos = new WeakMap(), metaMemoModel, metaMemoContext, metaMemoGame, metaMemoDate, metaMemoYear, metaMemoDoy;
 function playerMetaMemo(p) {
-  if (metaMemoContext !== state.meta || metaMemoGame !== state.meta.game || metaMemoDate !== state.meta.gameDate
+  if (metaMemoModel !== FMSSOutfieldMeta27.version || metaMemoContext !== state.meta || metaMemoGame !== state.meta.game || metaMemoDate !== state.meta.gameDate
       || metaMemoYear !== state.refYear || metaMemoDoy !== state.refDoy) {
-    metaMemos = new WeakMap(); metaMemoContext = state.meta; metaMemoGame = state.meta.game;
+    metaMemos = new WeakMap(); metaMemoModel = FMSSOutfieldMeta27.version; metaMemoContext = state.meta; metaMemoGame = state.meta.game;
     metaMemoDate = state.meta.gameDate; metaMemoYear = state.refYear; metaMemoDoy = state.refDoy;
   }
   const position = natPos(p).includes('GK') ? 'GK' : FMSSOutfieldMeta27.defaultPosition(p);
@@ -1845,17 +1865,28 @@ function metaPaScore(p) {
 function outfieldEvidenceLabel(status) {
   return t(status === 'PROXY_MODEL' ? 'outfieldMeta27Proxy' : status === 'DIRECT_POSITION_FAMILY' ? 'outfieldMeta27Direct' : 'outfieldMeta27Transfer');
 }
+function floorText(floors, attrs) {
+  const levels = { SEVERE_LOW_WORK_RATE: 'floorSevere', SEVERE_LOW_STAMINA: 'floorSevere',
+    LOW_WORK_RATE: 'floorLow', LOW_STAMINA: 'floorLow', BELOW_PLATEAU: 'floorBelow', UNKNOWN: 'floorUnknown' };
+  return [['WorkRate', floors.workRateFloor], ['Stamina', floors.staminaFloor]]
+    .filter(([, code]) => code !== 'NO_LOW_FLOOR_WARNING')
+    .map(([key, code]) => attrName(key) + (code === 'UNKNOWN' ? '' : ' ' + attrs[key]) + ' (' + t(levels[code]) + ')')
+    .join(' · ');
+}
 function outfieldMetaTip(p, projected = false, position = FMSSOutfieldMeta27.defaultPosition(p)) {
   let details = outfieldMetaForPosition(p, position);
   if (projected && details) {
     const attrs = projectAttrs(p), projectedDetails = attrs && outfieldMetaForPosition(p, position, attrs);
-    if (projectedDetails && projectedDetails.score > details.score) details = projectedDetails;
+    if (projectedDetails && projectedDetails.score >= details.score) details = projectedDetails;
   }
   const hint = t(projected ? 'outfieldMeta27PaHint' : 'outfieldMeta27Hint');
-  if (!details) return hint;
+  const floors = floorText(FMSSOutfieldMeta27.floorDiagnostics(p.attrs), p.attrs);
+  const explanation = floors ? t('floorObserved') + ' · ' + floors + '\n\n' + hint : hint;
+  if (!details) return explanation;
   return tf('outfieldMeta27Summary', { position, group: details.positionGroup,
-    evidence: outfieldEvidenceLabel(details.evidenceStatus), mac: details.macScore.toFixed(1), purity: details.purityScore.toFixed(1),
-    min: details.sourceMin.toFixed(1), max: details.sourceMax.toFixed(1), spread: details.sourceSpread.toFixed(1) }) + '\n\n' + hint;
+    linear: details.linearScore.toFixed(2), current: details.score.toFixed(2),
+    evidence: outfieldEvidenceLabel(details.positionEvidence), mac: details.macScore.toFixed(1), purity: details.purityScore.toFixed(1),
+    min: details.sourceMin.toFixed(1), max: details.sourceMax.toFixed(1), spread: details.sourceSpread.toFixed(1) }) + '\n\n' + explanation;
 }
 function metaHelpAttrs(p, projected = false) {
   if (state.meta.game === 'FM27' && !natPos(p).includes('GK')) return `data-tip="${escHtml(outfieldMetaTip(p, projected))}"`;
@@ -1870,10 +1901,17 @@ function outfieldPositionsHtml(p) {
     return `<div class="role-row"><span class="rn">${pos}${pos === preferred ? ' · ' + t('outfieldMeta27Default') : ''} · ${outfieldEvidenceLabel(mapping.evidence)}</span>`
       + `<span class="v ${roleClass(details?.score)}" data-tip="${escHtml(outfieldMetaTip(p, false, pos))}">${details ? details.score.toFixed(1) : '–'}</span></div>`;
   });
-  return rows.length ? `<div class="roles-box"><div class="rb-head">${t('outfieldMeta27Positions')}</div>${rows.join('')}</div>` : '';
+  const floors = floorText(FMSSOutfieldMeta27.floorDiagnostics(p.attrs), p.attrs);
+  const warning = floors ? '<div class="pill warn">⚠ ' + escHtml(floors) + '</div>' : '';
+  return warning + (rows.length ? `<div class="roles-box"><div class="rb-head">${t('outfieldMeta27Positions')}</div>${rows.join('')}</div>` : '');
 }
 function metaHtml(p) {
   const s = metaScore(p);
+  if (state.meta.game === 'FM27' && !natPos(p).includes('GK')) {
+    const floors = FMSSOutfieldMeta27.floorDiagnostics(p.attrs);
+    const marker = floors.floorWarnings.length ? ' ⚠' : floors.floorStatus === 'INCOMPLETE' ? ' ?' : '';
+    return `<span class="${roleClass(s)}" ${metaHelpAttrs(p)}>${s == null ? '–' : s.toFixed(1)}${marker}</span>`;
+  }
   return s == null ? '<span class="dim">–</span>' : `<span class="${roleClass(s)}" ${metaHelpAttrs(p)}>${s.toFixed(1)}</span>`;
 }
 function metaPaHtml(p) {
